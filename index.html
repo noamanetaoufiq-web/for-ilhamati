@@ -1,0 +1,460 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Ilhamati ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary-pink: #ff4d6d; --soft-pink: #ffb3c1; --bg-pink: #ffdeeb; }
+        body { 
+            margin: 0; padding: 0; font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #ffd1ff, #a1c4fd);
+            background-size: 400% 400%; animation: gradientBG 15s ease infinite;
+            min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+            color: #444; overflow-x: hidden; 
+        }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .floating-heart { position: fixed; bottom: -10vh; font-size: 20px; color: rgba(255, 105, 180, 0.6); z-index: 0; animation: moveUp 6s linear infinite; pointer-events: none; }
+        @keyframes moveUp { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
+        
+        #quiz-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-pink); z-index: 999; display: flex; align-items: center; justify-content: center; }
+        .quiz-card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 25px rgba(255, 77, 109, 0.2); border: 3px solid var(--soft-pink); max-width: 380px; width: 90%; text-align: center; }
+        .option-btn { background: #fff; border: 2px solid var(--soft-pink); padding: 12px; width: 100%; border-radius: 15px; margin-bottom: 10px; cursor: pointer; font-weight: 600; color: #555; display: block; }
+        
+        #main-content { display: none; width: 100%; max-width: 450px; padding: 20px; z-index: 10; }
+        .container { background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 30px; border: 4px solid var(--soft-pink); text-align: center; }
+        .counter-box { background: var(--primary-pink); color: white; padding: 15px; border-radius: 20px; margin: 20px 0; border: 2px solid white; }
+        .counter-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .counter-num { font-size: 22px; font-weight: 700; display: block; }
+        .section { margin-top: 25px; background: #fffcfc; border: 2px dashed var(--soft-pink); padding: 20px; border-radius: 20px; text-align: left; }
+        .btn-msg { background: var(--primary-pink); color: white; padding: 12px; border: none; border-radius: 50px; margin: 5px 0; width: 100%; font-weight: 600; cursor: pointer; }
+        .hidden-box { display: none; padding: 15px; background: #fff5f6; border-radius: 15px; margin-top: 10px; font-size: 13.5px; border-left: 4px solid var(--primary-pink); color: #555; white-space: pre-line; }
+        #reasons-box { display: none; max-height: 400px; overflow-y: auto; padding: 15px; background: #fff5f6; border-radius: 15px; margin-top: 10px; }
+        .playlist-link { display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid var(--soft-pink); padding: 12px; border-radius: 15px; margin-bottom: 10px; text-decoration: none; color: var(--primary-pink); font-size: 14px; font-weight: 600; }
+    </style>
+</head>
+
+<div id="quiz-gate">
+    <div class="quiz-card">
+        <img src="https://upload.wikimedia.org/wikipedia/en/0/05/Hello_kitty_character_portrait.png" style="width: 80px; margin-bottom: 15px;">
+        <h2 style="font-family:'Dancing Script'; color:var(--primary-pink);">Jawbini b3da ❤️</h2>
+        <p id="question-text">Question 1: Chno smiya li msmiha 3lk?</p>
+        <div id="options-container">
+            <button class="option-btn" onclick="checkAnswer('Ily')">Ily</button>
+            <button class="option-btn" onclick="checkAnswer('my love')">my love</button>
+            <button class="option-btn" onclick="checkAnswer('Ilham')">Ilham</button>
+        </div>
+        <p id="error-msg" style="color:red; display:none; font-size:12px; margin-top:10px;">Try again my love ❤️</p>
+    </div>
+</div>
+
+<div id="main-content">
+    <div class="container">
+        <h1 style="font-family:'Dancing Script'; color:var(--primary-pink); font-size: 36px;">Happy Birthday Ilhame ❤️</h1>
+        <div class="counter-box">
+            <p style="margin:0; font-size:12px; font-weight:600;">TOGETHER SINCE JAN 25, 2025</p>
+            <div class="counter-grid">
+                <div><span id="days" class="counter-num">0</span><small>Days</small></div>
+                <div><span id="hours" class="counter-num">0</span><small>Hrs</small></div>
+                <div><span id="mins" class="counter-num">0</span><small>Min</small></div>
+                <div><span id="secs" class="counter-num">0</span><small>Sec</small></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 style="font-family:'Dancing Script'; color:var(--primary-pink); text-align:center; font-size:26px;">💌 My Letter</h3>
+            <p style="font-size:14.5px; line-height:1.8; color:#555; white-space:pre-line;">
+                My treasure, 
+                
+                I hope had letter tkon radyak 7int ila 39lt nhar 24 decembre 2025 knti glti lya (mkrahtch idiro liya f3id miladi ghir chi lettre ) o ana ofc man9dch ndir rasi masm3tch wla mandirch chi haja nti gaylaha ya3ni baghaha .
+                
+                Btw happy birthday Just want you to know that you mean so much to me.You make my life better, my days brighter, and my heart calmer. I’m reallygrateful to have you in my life. 
+                
+                i’m writing this letter to tell u how much i love u and how grateful I am to have you in my life . You make my days brighter, my heart calmer,and everything feels better when you’re around With you, even the simplest moments become special I just want you to know that I care about you more than words can say and I hope I can keep making you smile, today and always.Forever grateful for you,And always here for you 
+                Noamane
+            </p>
+        </div>
+
+        <div class="section">
+            <h3 style="font-family:'Dancing Script'; color:var(--primary-pink); text-align:center; font-size:26px;">✨ Open This When...</h3>
+            <button class="btn-msg" onclick="toggleMsg('angry')">You're Angry at me 😅</button>
+            <div id="angry" class="hidden-box">If you’re reading this, I probably messed up or said something stupid. Just know that I never mean to hurt you or make you feel bad. Take your time to calm down, and whenever you're ready, let's talk? I hate it when we're not okay. ❤️</div>
+
+            <button class="btn-msg" onclick="toggleMsg('sad')">You're feeling Sad 🌧️</button>
+            <div id="sad" class="hidden-box">I wish I could be right there to give you a big hug and stay with you until you feel better. Remember that you are so strong, and it's okay to feel this way sometimes. I'm always here for you. Everything will be okay, my treasure. 🫂</div>
+
+            <button class="btn-msg" onclick="toggleMsg('miss')">You Miss me 🫂</button>
+            <div id="miss" class="hidden-box">I’m probably missing you more right now. M3ak f-bali dima, f ay lahda. Close your eyes for a second, breathe, and know that I'm right there with you in spirit. ❤️</div>
+
+            <button class="btn-msg" onclick="toggleMsg('happy')">You're Happy! 🌟</button>
+            <div id="happy" class="hidden-box">Seeing you happy is my favorite thing in the world! Keep that beautiful smile on your face because it makes everything brighter. ✨</div>
+
+            <button class="btn-msg" onclick="toggleMsg('sleepy')">You're Sleepy 😴</button>
+            <div id="sleepy" class="hidden-box">Sweet dreams, my beautiful treasure. I hope you have the most peaceful sleep. Rest well, and I'll be waiting to talk to you when you wake up. 🌙❤️</div>
+        </div>
+
+        <div class="section">
+            <h3 style="font-family:'Dancing Script'; color:var(--primary-pink); text-align:center; font-size:26px;">💖 100 Reasons Why I Love You</h3>
+            <button id="reasons-btn" onclick="generateReasons()" class="btn-msg" style="background:var(--soft-pink); color:#d81b60;">Show All 100 Reasons</button>
+            <div id="reasons-box"><div id="list-container"></div></div>
+        </div>
+
+        <div class="section">
+            <h3 style="font-family:'Dancing Script'; color:var(--primary-pink); text-align:center; font-size:26px;">🎵 Our Playlist</h3>
+            <a href="https://youtu.be/UMMZWMbdv2w" target="_blank" class="playlist-link"><span>🌙 cinnamon girl</span><span>▶️</span></a>
+            <a href="https://youtu.be/w9gKKo2PkAk" target="_blank" class="playlist-link"><span>🌿 wanna be yours x cardigan</span><span>▶️</span></a>
+            <a href="https://youtu.be/xy8HNniRsc4" target="_blank" class="playlist-link"><span>✨ Under The Influence</span><span>▶️</span></a>
+            <a href="https://youtu.be/N0oyRZiVyZc" target="_blank" class="playlist-link"><span>🧥 Cinnamon girl × Tulsa jesus freak</span><span>▶️</span></a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function createHeart() {
+        const heart = document.createElement('div'); heart.classList.add('floating-heart');
+        const hearts = ['❤️', '💖', '✨', '🌸', '💕']; heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.left = Math.random() * 100 + 'vw'; heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+        document.body.appendChild(heart); setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHeart, 400);
+
+    let step = 1;
+    function checkAnswer(ans) {
+        if(step === 1 && ans === 'Ily') {
+            step = 2; document.getElementById("question-text").innerText = "Question 2: Smit mama?";
+            document.getElementById("options-container").innerHTML = `<button class="option-btn" onclick="checkAnswer('Khadija')">Khadija</button><button class="option-btn" onclick="checkAnswer('Souad')">Souad</button><button class="option-btn" onclick="checkAnswer('Fatima')">Fatima</button>`;
+        } else if(step === 2 && ans === 'Khadija') {
+            step = 3; document.getElementById("question-text").innerText = "Question 3: Katbghini?";
+            document.getElementById("options-container").innerHTML = `<button class="option-btn" onclick="checkAnswer('Ah')">Ah</button><button class="option-btn" onclick="checkAnswer('La')">La</button>`;
+        } else if(step === 3 && ans === 'Ah') {
+            document.getElementById("quiz-gate").style.display = "none"; document.getElementById("main-content").style.display = "block";
+            startTimer();
+        } else { document.getElementById("error-msg").style.display = "block"; }
+    }
+
+    function startTimer() {
+        const start = new Date("January 25, 2025 00:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime(); const d = now - start;
+            document.getElementById("days").innerText = Math.floor(d / 86400000);
+            document.getElementById("hours").innerText = Math.floor((d % 86400000) / 3600000);
+            document.getElementById("mins").innerText = Math.floor((d % 3600000) / 60000);
+            document.getElementById("secs").innerText = Math.floor((d % 60000) / 1000);
+        }, 1000);
+    }
+
+    function toggleMsg(id) {
+        let x = document.getElementById(id); x.style.display = (x.style.display === "none" || x.style.display === "") ? "block" : "none";
+    }
+
+    function generateReasons() {
+        const box = document.getElementById('reasons-box'); const container = document.getElementById('list-container');
+        if (box.style.display === "block") { box.style.display = "none"; document.getElementById('reasons-btn').innerText = "Show All 100 Reasons"; return; }
+        
+        const myWords = [
+            "Because you make me smile without trying", "Because your presence calms my heart", "Because you understand me",
+            "Because you listen to me", "Because you’re kind", "Because you’re real",
+            "7int 3ndk sbr m3aya 7ta fnharati lkhyba", "Because you support me (hadi kngolha lk dima)", "Because you believe in me (ta hadi)",
+            "Because you make my bad days better", "Because your smile is my favorite view", "Bcs d7ktk ktrd rouuuu7 makes everything light",
+            "Because u’re beautiful inside and out (hadi my7ydhach lk tbib abniti)", "Because you’re honest", "Because you care o hadi kt3jbni",
+            "Bcs ktkhlini n7s brasi safe m3k", "Because you respect me", "Because you accept me as I am",
+            "7int ktmotivini fay haja knbghi ndirha", "Because life feels easier with you", "Because you make simple moments special o hadi diiiima",
+            "Because you’re my peace", "Because you’re my happiness", "Because you’re my comfort",
+            "Wa 7int kt7ssini bl2ihtimam", "Because you inspire me", "Because you’re always there",
+            "Because you’re thoughtful", "Because you’re sweet", "O 7int nti hiya my favorit person",
+            "O ktkhlini n7s beasi m7boob", "Because you trust me", "Because you’re strong.",
+            "Also 7int nti 7nina o 3lia", "Because you bring light into my life", "O ktkhlini nd7k wakha mankonch baghi eeeeeh ya bniti eeh",
+            "Because you’re unique hadi bayna", "Because you’re you", "Because you understand my silence",
+            "Because you never judge me", "Because you make my heart feel full", "Ktkhlini nbghi nwli 7sn",
+            "Because you give meaning to my days (ta3m ta3m hhh)", "Because you make love feel easy o gha m3k ahobi", "Because you’re my safe place",
+            "Because you care about my feelings", "Because you’re always honest with me dimn dimn dimn", "Because you’re my happiness without effort",
+            "Because you make me feel lucky", "Because you’re my favorite thought", "Because you make everything brighter",
+            "Dimn fi bali", "Because you make me feel understood (wakha makn3rfx nchr7)", "Because you make me feel valued",
+            "Because you bring peace to my soul", "Because you make my heart smile", "Because you’re special to me",
+            "Because you’re my comfort zone", "Because you’re my person", "Because you make love feel real",
+            "Because you accept my flaws", "Because you make me feel enough", "Because you stand by me",
+            "Kn7s m3k b7l dar bcs nti my home", "Because you’re my favorite hello (jdida 3lk hadi abnti hhhhhhhhhhh)", "Because you’re my hardest goodbye (amn hadi atfhmi li 9bl)",
+            "O kt5lini n7s brasi mkhtar", "Because you’re always honest with your feelings", "Because you make me feel secure",
+            "Ktrodi lbal ldok tafasil sghaaar", "Because you make my heart feel calm", "Because you make me feel appreciated",
+            "Because you bring warmth to my life", "7int dimn nti hiya nti m3aya", "Because you make love feel natural.",
+            "Because you give me peace of mind", "Ktkhlini nkon fr7an bla ta sabab", "Gha bchoftk knbred (mtal nhar 1/1/2026 knt m3sb o khlitini nd7k fach 3yti liya appele vidio)",
+            "Because you’re my favorite surprise", "Because you make me feel alive", "Because you’re my best feeling",
+            "Because you make me feel complete", "Because you make me feel supported", "Because you make my world better",
+            "Because you’re my comfort in chaos", "Because you’re my smile reason", "Because you make me feel calm inside",
+            "Because you’re my heart’s choice", "Because you’re my favorite story", "Because you make me feel loved every day",
+            "Because you’re my peace in this world", "Because you make my heart softer", "Because you’re my favorite part of every day",
+            "Because you make love feel simple", "Because you’re my happiness without conditions", "Because you’re my forever feeling",
+            "Because you make my heart feel safe", "Because you’re my reason to smile", "7int nti hiya my looove",
+            "Because I love you… just because ❤️"
+        ];
+
+        container.innerHTML = "";
+        myWords.forEach((text, index) => {
+            container.innerHTML += `<p style="margin:10px 0; border-bottom:1px solid #ffeef2; padding-bottom:5px;"><span style="color:var(--primary-pink); font-weight:600;">${index + 1}.</span> ${text}</p>`;
+        });
+
+        // هاد السطر هو اللي كنتي باغي بالضبط:
+        container.innerHTML += `<p style="color:red; font-weight:bold; font-size:17px; margin-top:15px;">Anzidk 101 7int bghit o tstahli ktr mn 10000000000000000 Because loving you is not just a feeling, it’s a choice I make every single day. M3ak kan7ess b-ra7a b-aman o b-peace li ma 3mri l9ito qbel You make everything feel lighter even the hard days Katfahmini bla ma nhdar, w katwqfi m3aya f kol wa9t With you silence feels safe and moments feel real.You’re not just my girlfriend you’re my safe place my favorite person, and my best feeling.</p>`;
+        
+        container.innerHTML += `<p style="color:red; font-weight:bold; font-size:18px; margin-top:10px; text-align:center;">And no matter what, I choose you… today, tomorrow and always ❤️</p>`;
+
+        box.style.display = "block"; document.getElementById('reasons-btn').innerText = "Hide Reasons";
+    }
+</script>
+<div class="section">
+    <h3 style="font-family:'Dancing Script'; text-align:center; color:var(--primary-pink); font-size:26px;">✨ Our Special Moments</h3>
+    <p style="font-size: 11px; text-align:center; color: #888; margin-bottom: 15px;">Click on the cards to flip them ❤️</p>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div class="memory-card" onclick="this.querySelector('.card-inner').style.transform = this.querySelector('.card-inner').style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)'" style="perspective:1000px; height:120px; cursor:pointer;">
+            <div class="card-inner" style="position:relative; width:100%; height:100%; transition: transform 0.6s; transform-style:preserve-3d; border-radius:15px;">
+                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:var(--soft-pink); border-radius:15px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; font-weight:bold; text-align:center; padding:5px;">
+                    Jan 25, 2025<br><small style="font-weight:normal;">When we met ✨</small>
+                </div>
+                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:white; transform:rotateY(180deg); border-radius:15px; border:2px solid var(--soft-pink); font-size:11px; padding:8px; display:flex; align-items:center; text-align:center; color:#555; font-weight:600;">
+                    Nhar li tla9ina fih awel merra o bdat l-9issa ❤️
+                </div>
+            </div>
+        </div>
+
+        <div class="memory-card" onclick="this.querySelector('.card-inner').style.transform = this.querySelector('.card-inner').style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)'" style="perspective:1000px; height:120px; cursor:pointer;">
+            <div class="card-inner" style="position:relative; width:100%; height:100%; transition: transform 0.6s; transform-style:preserve-3d; border-radius:15px;">
+                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:var(--soft-pink); border-radius:15px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; font-weight:bold; text-align:center; padding:5px;">
+                    Feb 14, 2025<br><small style="font-weight:normal;">Protection 🫂</small>
+                </div>
+                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:white; transform:rotateY(180deg); border-radius:15px; border:2px solid var(--soft-pink); font-size:11px; padding:8px; display:flex; align-items:center; text-align:center; color:#555; font-weight:600;">
+                    Nhar jayin mn les cours o jaw dok drari.. b9iti chadani ❤️
+                </div>
+            </div>
+        </div>
+
+        <div class="memory-card" onclick="this.querySelector('.card-inner').style.transform = this.querySelector('.card-inner').style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)'" style="perspective:1000px; height:120px; cursor:pointer;">
+            <div class="card-inner" style="position:relative; width:100%; height:100%; transition: transform 0.6s; transform-style:preserve-3d; border-radius:15px;">
+                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:var(--soft-pink); border-radius:15px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; font-weight:bold; text-align:center; padding:5px;">
+                    Mar 01, 2025<br><small style="font-weight:normal;">The Sea 🌊</small>
+                </div>
+                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:white; transform:rotateY(180deg); border-radius:15px; border:2px solid var(--soft-pink); font-size:11px; padding:8px; display:flex; align-items:center; text-align:center; color:#555; font-weight:600;">
+                    Nhar li khrjna fih l-b7ar o b9ina kndoro.. memories! 🐚
+                </div>
+            </div>
+        </div>
+
+        <div class="memory-card" onclick="this.querySelector('.card-inner').style.transform = this.querySelector('.card-inner').style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)'" style="perspective:1000px; height:120px; cursor:pointer;">
+            <div class="card-inner" style="position:relative; width:100%; height:100%; transition: transform 0.6s; transform-style:preserve-3d; border-radius:15px;">
+                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:var(--soft-pink); border-radius:15px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; font-weight:bold; text-align:center; padding:5px;">
+                    Apr 01, 2025<br><small style="font-weight:normal;">Ice Cream 🍦</small>
+                </div>
+                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:white; transform:rotateY(180deg); border-radius:15px; border:2px solid var(--soft-pink); font-size:11px; padding:8px; display:flex; align-items:center; text-align:center; color:#555; font-weight:600;">
+                    Khrjna khdina ice cream jiht b7ar o dkhlna Decathlon ✨
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section" style="text-align: center; background: #fff; border: 2px solid #ff4d6d; position: relative; z-index: 10;">
+    <h3 style="font-family:'Dancing Script'; color:#ff4d6d; font-size: 24px;">🍯 The Love Jar</h3>
+    <p style="font-size: 11px; color: #888;">Tap the jar to get a sweet message ❤️</p>
+
+    <div id="jar" onclick="revealSweetNote(this)" style="font-size: 60px; cursor: pointer; transition: 0.3s; display: inline-block; margin: 15px 0;">
+        🍯
+    </div>
+
+    <div id="sweet-note" style="min-height: 40px; font-weight: 600; color: #ff4d6d; font-size: 14px; margin-top: 10px;"></div>
+</div>
+
+<script>
+function revealSweetNote(element) {
+    const notes = [
+        "You're my sweetest dream come true! ✨",
+        "I love you more than pizza (and that's a lot!) 🍕❤️",
+        "You're the 'Ilham' in my inspiration 🌟",
+        "My heart beats only for you! 💓",
+        "Together is my favorite place to be 🫂",
+        "You're the best thing that ever happened to me 🌸"
+    ];
+    
+    // Animation of the jar
+    element.style.transform = "scale(1.2) rotate(10deg)";
+    setTimeout(() => { element.style.transform = "scale(1) rotate(0deg)"; }, 200);
+
+    // Display random note
+    const display = document.getElementById('sweet-note');
+    const random = notes[Math.floor(Math.random() * notes.length)];
+    display.innerText = random;
+    
+    // Trigger small hearts around the jar
+    for(let i=0; i<5; i++) {
+        const h = document.createElement('div');
+        h.innerText = '❤️';
+        h.style.position = 'fixed';
+        h.style.left = event.clientX + (Math.random()*40-20) + 'px';
+        h.style.top = event.clientY + 'px';
+        h.style.zIndex = '1000';
+        h.style.animation = 'floatUp 1s ease-out forwards';
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 1000);
+    }
+}
+</script>
+<div style="position: relative; z-index: 9999; margin: 40px 0; text-align: center; padding: 20px;">
+    
+    <button id="mainSurpriseBtn" onclick="toggleGrandModal(true)" 
+        style="
+            background: #ff4d6d; 
+            color: white; 
+            border: 4px solid white; 
+            padding: 20px 40px; 
+            border-radius: 50px; 
+            font-size: 20px; 
+            font-weight: bold; 
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.5); 
+            cursor: pointer;
+            position: relative;
+            z-index: 10000;
+            pointer-events: auto !important;
+        ">
+        ✨ CLICK FOR MY BIG SURPRISE ✨
+    </button>
+
+    <div id="grand-modal" style="
+        display: none; 
+        position: fixed; 
+        top: 0; left: 0; 
+        width: 100%; height: 100%; 
+        background: rgba(255, 77, 109, 0.98); 
+        z-index: 20000; 
+        overflow-y: auto; 
+        align-items: center; 
+        justify-content: center;
+        pointer-events: auto;">
+        
+        <div style="
+            background: white; 
+            padding: 30px; 
+            border-radius: 30px; 
+            max-width: 85%; 
+            margin: 50px auto; 
+            text-align: center; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            position: relative;">
+            
+            <h2 style="font-family:'Dancing Script'; color:#ff4d6d; font-size:30px; margin-bottom: 20px;">To My Treasure ❤️</h2>
+            
+            <div style="font-size: 15px; line-height: 1.8; color: #444; text-align: left; white-space: pre-line; font-family: 'Poppins', sans-serif;">
+                <b>My treasure / Ilhamati ❤️</b>
+                
+                Happy birthday! Ntmana had l-mofaja2a sghira tkon 3jbatak wakha ghir chwiya.
+                
+                Mhm <b>love u</b>, and no matter dkchi dyal l-mchakil li kykono binatna, dkchi sghir godamna yak hhhh. 
+                
+                Mhm kanbghiikk o knmut 3lk o kn7ma9 3lk o chla 7wyj... mhm bizo bizo bizo 💋
+                
+                Ana m3k f-ay haja o matkhli ta haja tkhlik tfkri fiha bzzf, ta haja matsta79. Nti 7sn mn ay haja inchaalah kolchi aydoz o at7la l-yam o tkoni fr7ana kif bghiti. ❤️✨
+            </div>
+
+            <button onclick="toggleGrandModal(false)" style="
+                margin-top: 25px; 
+                background: #ff4d6d; 
+                color: white; 
+                border: none; 
+                padding: 12px 30px; 
+                border-radius: 20px; 
+                font-weight: bold;
+                cursor: pointer;">Close ❤️</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// هاد الفانكشن هي اللي كتحكم فـ الكليك
+function toggleGrandModal(show) {
+    const modal = document.getElementById('grand-modal');
+    if (show) {
+        modal.style.display = 'block';
+        modal.style.display = 'flex'; // باش يجي فـ الوسط
+        createConfetti(); // اختياري: الا بغيتي وراق ملونين يطيرو
+    } else {
+        modal.style.display = 'none';
+    }
+}
+
+function createConfetti() {
+    for(let i=0; i<40; i++) {
+        const c = document.createElement('div');
+        c.style.position = 'fixed';
+        c.style.width = '10px';
+        c.style.height = '10px';
+        c.style.background = ['#fff', '#ffd1ff', '#ffb3c1', '#ff4d6d'][Math.floor(Math.random()*4)];
+        c.style.top = '-10px';
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.zIndex = '25000';
+        c.style.animation = 'confettiFall 3s linear forwards';
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 3000);
+    }
+}
+</script>
+
+<style>
+@keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+</style>
+  <script>
+    // تعديل صغير على الفانكشن ديالك باش نزيدو الهروب
+    const originalCheckAnswer = checkAnswer;
+    checkAnswer = function(ans) {
+        if (ans === 'La') {
+            const btn = event.target;
+            btn.style.position = 'fixed';
+            btn.style.top = Math.random() * 80 + 10 + '%';
+            btn.style.left = Math.random() * 80 + 10 + '%';
+            btn.innerText = "Ma canch 'La' 😂❤️";
+            return;
+        }
+        originalCheckAnswer(ans);
+    };
+
+    // 2. قلوبة كيخرجوا مع الكليك
+    document.addEventListener('click', function(e) {
+        for(let i=0; i<3; i++) {
+            const heart = document.createElement('div');
+            heart.innerText = '💖';
+            heart.style.position = 'fixed';
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
+            heart.style.fontSize = '20px';
+            heart.style.pointerEvents = 'none';
+            heart.style.zIndex = '100000';
+            heart.style.animation = 'floatAndFade 1s ease-out forwards';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1000);
+        }
+    });
+</script>
+
+<style>
+@keyframes floatAndFade {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(${(Math.random()-0.5)*100}px, -100px) scale(0); opacity: 0; }
+}
+</style>
+
+<script>
+    // هاد الكود كيزيد القسم بلا ما تمسح الـ HTML القديم
+    const playlistSection = document.querySelectorAll('.section')[4]; // كايخد السكشن ديال البلاي ليست
+    const goalsHTML = `
+        <div class="section" style="background: #fff0f3; border: 2px solid var(--primary-pink);">
+            <h3 style="font-family:'Dancing Script'; color:var(--primary-pink); text-align:center; font-size:26px;">🚀 Our Love Goals</h3>
+            <ul style="list-style: none; padding: 0; font-size: 14px; color: #555;">
+                <li style="margin-bottom: 10px;">🏠 <b>Stay Together:</b> Dima m3a b3dyatna inchaalah.</li>
+                <li style="margin-bottom: 10px;">✈️ <b>Travel:</b> Ndoro l-3alam kiiif kiglti lya.</li>
+                <li style="margin-bottom: 10px;">💍 <b>Forever:</b> Till the very end ❤️</li>
+            </ul>
+        </div>
+    `;
+    playlistSection.insertAdjacentHTML('beforebegin', goalsHTML);
+</script>
