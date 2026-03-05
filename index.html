@@ -1,460 +1,550 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Ilhamati </title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>The Eternal Palace | Ilham & Noamane 👑</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Pacifico&family=Playfair+Display:ital,wght@1,700&family=Montserrat:wght@900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
     <style>
-        :root { --primary-pink: #ff4d6d; --soft-pink: #ffb3c1; --bg-pink: #ffdeeb; }
-        body { 
-            margin: 0; padding: 0; font-family: 'Poppins', sans-serif; 
-            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #ffd1ff, #a1c4fd);
-            background-size: 400% 400%; animation: gradientBG 15s ease infinite;
-            min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-            color: #444; overflow-x: hidden; 
+        :root {
+            --primary-pink: #ff5277; /* Hello Kitty Pink */
+            --soft-pink: #ffcce0;
+            --bg-light: #ffe6f0;
+            --white: #ffffff;
+            --dark: #4a4a4a;
+            --shadow: 0 15px 40px rgba(255, 82, 119, 0.25);
         }
-        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .floating-heart { position: fixed; bottom: -10vh; font-size: 20px; color: rgba(255, 105, 180, 0.6); z-index: 0; animation: moveUp 6s linear infinite; pointer-events: none; }
-        @keyframes moveUp { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
+
+        /* GENERAL STYLING & HELLO KITTY VIBES */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        #quiz-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-pink); z-index: 999; display: flex; align-items: center; justify-content: center; }
-        .quiz-card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 25px rgba(255, 77, 109, 0.2); border: 3px solid var(--soft-pink); max-width: 380px; width: 90%; text-align: center; }
-        .option-btn { background: #fff; border: 2px solid var(--soft-pink); padding: 12px; width: 100%; border-radius: 15px; margin-bottom: 10px; cursor: pointer; font-weight: 600; color: #555; display: block; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--soft-pink);
+            /* Hello Kitty cute polka dot background */
+            background-image: radial-gradient(var(--white) 15%, transparent 16%);
+            background-size: 30px 30px;
+            color: var(--dark);
+            overflow-x: hidden;
+            /* Cute Heart Cursor */
+            cursor: url('https://cdn-icons-png.flaticon.com/32/833/833472.png'), auto;
+        }
+
+        a, button, .env-btn, .moving-heart, input {
+            cursor: url('https://cdn-icons-png.flaticon.com/32/833/833472.png'), pointer !important;
+        }
+
+        /* Visibility Fixes */
+        p, b, span, div, li { font-size: 18px; line-height: 1.7; color: #444; }
+        h1, h2 { 
+            font-family: 'Pacifico', cursive; 
+            color: var(--primary-pink); 
+            text-align: center; 
+            text-shadow: 2px 2px 0px #fff; /* Cute text shadow */
+        }
+
+        /* SECURITY GATE */
+        #gate {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--soft-pink), var(--primary-pink));
+            z-index: 1000000; display: flex; align-items: center; justify-content: center;
+            transition: 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Bouncy exit */
+        }
+
+        .auth-card {
+            background: var(--white); padding: 40px; border-radius: 40px;
+            width: 90%; max-width: 450px; text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15); 
+            border: 6px dashed var(--primary-pink); /* Hello kitty dashed border */
+            position: relative;
+        }
+
+        /* Hello kitty bow on top of auth card */
+        .auth-card::before {
+            content: '🎀';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 50px;
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, -10px); }
+        }
+
+        .cam-box {
+            width: 200px; height: 200px; border-radius: 50%;
+            border: 5px dashed var(--primary-pink); margin: 20px auto;
+            background: #ffe6f0; overflow: hidden; position: relative; display: none;
+        }
+        #vid { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        .scan-line {
+            position: absolute; top: 0; width: 100%; height: 4px;
+            background: var(--primary-pink); box-shadow: 0 0 15px var(--primary-pink);
+            animation: scan 2s infinite linear;
+        }
+        @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
+
+        .in-style {
+            width: 100%; padding: 18px; border-radius: 30px; border: 3px solid #ffe6f0;
+            margin-bottom: 20px; font-size: 18px; text-align: center; font-weight: 600;
+            outline: none; transition: 0.3s;
+        }
+        .in-style:focus { border-color: var(--primary-pink); background: #fffafb; }
         
-        #main-content { display: none; width: 100%; max-width: 450px; padding: 20px; z-index: 10; }
-        .container { background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 30px; border: 4px solid var(--soft-pink); text-align: center; }
-        .counter-box { background: var(--primary-pink); color: white; padding: 15px; border-radius: 20px; margin: 20px 0; border: 2px solid white; }
-        .counter-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .counter-num { font-size: 22px; font-weight: 700; display: block; }
-        .section { margin-top: 25px; background: #fffcfc; border: 2px dashed var(--soft-pink); padding: 20px; border-radius: 20px; text-align: left; }
-        .btn-msg { background: var(--primary-pink); color: white; padding: 12px; border: none; border-radius: 50px; margin: 5px 0; width: 100%; font-weight: 600; cursor: pointer; }
-        .hidden-box { display: none; padding: 15px; background: #fff5f6; border-radius: 15px; margin-top: 10px; font-size: 13.5px; border-left: 4px solid var(--primary-pink); color: #555; white-space: pre-line; }
-        #reasons-box { display: none; max-height: 400px; overflow-y: auto; padding: 15px; background: #fff5f6; border-radius: 15px; margin-top: 10px; }
-        .playlist-link { display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid var(--soft-pink); padding: 12px; border-radius: 15px; margin-bottom: 10px; text-decoration: none; color: var(--primary-pink); font-size: 14px; font-weight: 600; }
+        .btn-style {
+            width: 100%; padding: 18px; border-radius: 30px; border: none;
+            background: var(--primary-pink); color: white; font-weight: 800;
+            font-size: 18px; box-shadow: 0 8px 0 #d81b60;
+            transition: 0.2s;
+        }
+        .btn-style:hover { transform: translateY(3px); box-shadow: 0 5px 0 #d81b60; }
+        .btn-style:active { transform: translateY(8px); box-shadow: 0 0 0 #d81b60; }
+
+        /* PALACE CONTENT */
+        #palace { display: none; max-width: 850px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 10;}
+
+        .card {
+            background: rgba(255, 255, 255, 0.95); border-radius: 40px; padding: 40px;
+            margin-bottom: 50px; box-shadow: var(--shadow); 
+            border: 4px dashed #ffcce0;
+            position: relative;
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s;
+        }
+        .card:hover { transform: scale(1.02); border-color: var(--primary-pink); }
+        
+        /* Spinning flower decoration for every card */
+        .card::after {
+            content: '🌸';
+            position: absolute;
+            top: -20px;
+            right: -15px;
+            font-size: 40px;
+            animation: spin 8s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* TIMER & REASONS */
+        .timer-grid { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .t-box { 
+            background: #fff; border: 3px solid var(--soft-pink);
+            width: 120px; padding: 20px; border-radius: 30px; text-align: center;
+            box-shadow: 0 5px 15px rgba(255, 82, 119, 0.1);
+        }
+        .t-box b { display: block; font-size: 35px; color: var(--primary-pink); font-family: 'Montserrat', sans-serif;}
+
+        .reason-line { 
+            padding: 15px 10px; border-bottom: 2px dashed #ffeef2; 
+            font-weight: 500; display: flex; gap: 10px; transition: 0.3s;
+            border-radius: 10px;
+        }
+        .reason-line:hover { background: #fff0f5; transform: translateX(5px); }
+        .reason-line span { color: var(--primary-pink); font-weight: 800; }
+
+        /* OPEN WHEN & PLAYLIST */
+        .env-btn {
+            width: 100%; padding: 20px; background: #fff0f5; border-radius: 25px;
+            margin-bottom: 15px; border: 3px solid var(--soft-pink);
+            display: flex; justify-content: space-between; font-weight: 700;
+            transition: 0.3s; box-shadow: 0 4px 0 var(--soft-pink);
+        }
+        .env-btn:hover { background: var(--primary-pink); color: white; border-color: var(--primary-pink); }
+        .env-box { display: none; padding: 25px; background: #fff; border-radius: 25px; border: 3px dashed var(--primary-pink); margin-bottom: 20px; font-weight: bold;}
+
+        .song {
+            display: flex; align-items: center; padding: 15px; background: #fff;
+            border-radius: 25px; margin-bottom: 15px; text-decoration: none; color: inherit;
+            border: 2px solid #ffe6f0; transition: 0.3s;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+        }
+        .song:hover { transform: translateX(10px); background: #fff0f5; border-color: var(--primary-pink); }
+        .disc { width: 50px; height: 50px; background: var(--primary-pink); border-radius: 50%; margin-right: 15px; animation: rot 4s infinite linear; border: 4px solid #fff; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
+        @keyframes rot { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+        /* KITTY */
+        .kitty { position: fixed; bottom: 20px; right: 20px; width: 130px; z-index: 999; pointer-events: none; animation: float 3s infinite ease-in-out; filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.2)); }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        /* BONUS STYLES */
+        #game-area {
+            width: 100%; height: 250px; background: #fff0f5; border-radius: 20px;
+            position: relative; overflow: hidden; border: 4px dashed var(--primary-pink);
+            margin-top: 20px; 
+        }
+        .moving-heart {
+            position: absolute; font-size: 35px; transition: 0.1s;
+            user-select: none; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
+        }
+        .score-board { font-weight: 800; color: var(--primary-pink); text-align: center; font-size: 22px; background: #fff; display: inline-block; padding: 5px 20px; border-radius: 20px; border: 2px solid var(--soft-pink); margin-top: 10px;}
+        
+        #hug-btn {
+            background: var(--primary-pink); color: white; border: none; padding: 15px 30px;
+            border-radius: 50px; font-weight: 800; font-size: 18px; margin-top: 20px;
+            transition: 0.3s; box-shadow: 0 8px 0 #d81b60;
+        }
+        #hug-btn:hover { transform: scale(1.05); }
+        #hug-btn:active { transform: translateY(5px); box-shadow: 0 3px 0 #d81b60; }
+
+        /* MAGICAL FALLING FLOWERS & HEARTS */
+        .falling-item {
+            position: fixed; top: -10%; z-index: 1; user-select: none; pointer-events: none;
+            animation: fall linear forwards; opacity: 0.8;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg) translateX(0); }
+            100% { transform: translateY(110vh) rotate(360deg) translateX(50px); }
+        }
+        
+        /* AI CHAT STYLES */
+        .chat-container {
+            height: 250px; overflow-y: auto; background: #fffafb; border: 2px dashed var(--soft-pink); 
+            padding: 15px; border-radius: 20px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px;
+        }
+        .msg-ai { background: var(--primary-pink); color: white; padding: 10px 15px; border-radius: 15px 15px 15px 0; align-self: flex-start; max-width: 80%; font-size: 16px; }
+        .msg-user { background: #ffe6f0; color: var(--dark); padding: 10px 15px; border-radius: 15px 15px 0 15px; align-self: flex-end; max-width: 80%; border: 1px solid var(--primary-pink); font-size: 16px; }
     </style>
 </head>
+<body>
 
-<div id="quiz-gate">
-    <div class="quiz-card">
-        <img src="https://upload.wikimedia.org/wikipedia/en/0/05/Hello_kitty_character_portrait.png" style="width: 80px; margin-bottom: 15px;">
-        <h2 style="font-family:'Dancing Script'; color:var(--primary-pink);">Jawbini b3da ❤️</h2>
-        <p id="question-text">Question 1: Chno smiya li msmiha 3lk?</p>
-        <div id="options-container">
-            <button class="option-btn" onclick="checkAnswer('Ily')">Ily</button>
-            <button class="option-btn" onclick="checkAnswer('my love')">my love</button>
-            <button class="option-btn" onclick="checkAnswer('Ilham')">Ilham</button>
+    <div id="magic-bg"></div>
+
+    <img src="https://i.pinimg.com/originals/9e/7c/ae/9e7cae834618e4785461160358482df7.gif" class="kitty">
+
+    <div id="gate">
+        <div class="auth-card">
+            <div id="quiz-ui">
+                <h2 style="margin-bottom: 20px;">Palace Security 🔐</h2>
+                <p id="q-txt" style="margin-bottom: 20px; font-weight: 700;">Question 1: Chno smiya li msmiha 3lk?</p>
+                <input type="text" id="q-in" class="in-style" placeholder="Your Answer...">
+                <button class="btn-style" onclick="handleQuiz()">Verify 🎀</button>
+            </div>
+            <div id="face-ui" style="display:none;">
+                <h2 style="margin-bottom: 20px;">Face ID Scan</h2>
+                <div class="cam-box" style="display:block;">
+                    <div class="scan-line"></div>
+                    <video id="vid" autoplay playsinline></video>
+                </div>
+                <p style="margin-bottom: 20px; font-weight:bold; color: var(--primary-pink);">Scanning for Ilham's face... 🎀</p>
+                <button class="btn-style" onclick="initCam()">Start Scanner 👑</button>
+            </div>
         </div>
-        <p id="error-msg" style="color:red; display:none; font-size:12px; margin-top:10px;">Try again my love ❤️</p>
     </div>
-</div>
 
-<div id="main-content">
-    <div class="container">
-        <h1 style="font-family:'Dancing Script'; color:var(--primary-pink); font-size: 36px;">Happy Birthday Ilhame ❤️</h1>
-        <div class="counter-box">
-            <p style="margin:0; font-size:12px; font-weight:600;">TOGETHER SINCE JAN 25, 2025</p>
-            <div class="counter-grid">
-                <div><span id="days" class="counter-num">0</span><small>Days</small></div>
-                <div><span id="hours" class="counter-num">0</span><small>Hrs</small></div>
-                <div><span id="mins" class="counter-num">0</span><small>Min</small></div>
-                <div><span id="secs" class="counter-num">0</span><small>Sec</small></div>
+    <div id="palace">
+        
+        <div class="card" style="text-align: center;">
+            <img src="https://i.pinimg.com/originals/47/4d/9c/474d9c02685973713066371465228189.gif" style="width: 140px; border-radius: 50%; border: 4px dashed var(--soft-pink); padding: 5px; margin-bottom: 15px;">
+            <h1>Welcome Home, Ilham!</h1>
+            <p>Every corner of this palace belongs to you. 🌸</p>
+        </div>
+
+        <div class="card">
+            <h2>🕒 Timeless Connection</h2>
+            <div class="timer-grid" style="margin-top: 20px;">
+                <div class="t-box"><b><span id="d">0</span></b><span>Days</span></div>
+                <div class="t-box"><b><span id="h">0</span></b><span>Hrs</span></div>
+                <div class="t-box"><b><span id="m">0</span></b><span>Min</span></div>
+                <div class="t-box"><b><span id="s">0</span></b><span>Sec</span></div>
+            </div>
+            <p style="text-align: center; margin-top: 20px; font-weight: 800; color: var(--primary-pink); font-size: 20px;">Since: Jan 25, 2025 💖</p>
+        </div>
+
+        <div class="card">
+            <h2>🤖 Ask Noamane's Heart</h2>
+            <p style="text-align: center; font-weight: bold; margin-bottom: 15px;">Swlini ay 7aja a Ilham, o ghayjawbk l9lb dyali 💖</p>
+            <div id="chat-box" class="chat-container">
+                <div class="msg-ai">Hbibti Ilham, swlini ay 7aja! 🎀 (Ex: chhal katbghini? fo9ach tsahbna? ...)</div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="ai-input" class="in-style" style="margin-bottom: 0; flex: 1;" placeholder="Ktbili hna...">
+                <button class="btn-style" style="width: auto; padding: 15px 25px;" onclick="askAI()">Send</button>
             </div>
         </div>
 
-        <div class="section">
-            <h3 style="font-family:'Dancing Script'; color:var(--primary-pink); text-align:center; font-size:26px;">💌 My Letter</h3>
-            <p style="font-size:14.5px; line-height:1.8; color:#555; white-space:pre-line;">
-                My treasure, 
-                
-                I hope had letter tkon radyak 7int ila 39lt nhar 24 decembre 2025 knti glti lya (mkrahtch idiro liya f3id miladi ghir chi lettre ) o ana ofc man9dch ndir rasi masm3tch wla mandirch chi haja nti gaylaha ya3ni baghaha .
-                
-                Btw happy birthday Just want you to know that you mean so much to me.You make my life better, my days brighter, and my heart calmer. I’m reallygrateful to have you in my life. 
-                
-                i’m writing this letter to tell u how much i love u and how grateful I am to have you in my life . You make my days brighter, my heart calmer,and everything feels better when you’re around With you, even the simplest moments become special I just want you to know that I care about you more than words can say and I hope I can keep making you smile, today and always.Forever grateful for you,And always here for you 
-                Noamane
-            </p>
+        <div class="card" style="text-align: center;">
+            <h2>🎮 The Love Quest</h2>
+            <p style="font-weight: bold; margin-top:10px;">Catch 10 hearts! ❤️</p>
+            <div class="score-board">Score: <span id="score">0</span> 🎀</div>
+            <div id="game-area">
+                <div id="target-heart" class="moving-heart" onclick="catchHeart(event)">❤️</div>
+            </div>
         </div>
 
-        <div class="section">
-            <h3 style="font-family:'Dancing Script'; color:var(--primary-pink); text-align:center; font-size:26px;">✨ Open This When...</h3>
-            <button class="btn-msg" onclick="toggleMsg('angry')">You're Angry at me 😅</button>
-            <div id="angry" class="hidden-box">If you’re reading this, I probably messed up or said something stupid. Just know that I never mean to hurt you or make you feel bad. Take your time to calm down, and whenever you're ready, let's talk? I hate it when we're not okay. ❤️</div>
-
-            <button class="btn-msg" onclick="toggleMsg('sad')">You're feeling Sad 🌧️</button>
-            <div id="sad" class="hidden-box">I wish I could be right there to give you a big hug and stay with you until you feel better. Remember that you are so strong, and it's okay to feel this way sometimes. I'm always here for you. Everything will be okay, my treasure. 🫂</div>
-
-            <button class="btn-msg" onclick="toggleMsg('miss')">You Miss me 🫂</button>
-            <div id="miss" class="hidden-box">I’m probably missing you more right now. M3ak f-bali dima, f ay lahda. Close your eyes for a second, breathe, and know that I'm right there with you in spirit. ❤️</div>
-
-            <button class="btn-msg" onclick="toggleMsg('happy')">You're Happy! 🌟</button>
-            <div id="happy" class="hidden-box">Seeing you happy is my favorite thing in the world! Keep that beautiful smile on your face because it makes everything brighter. ✨</div>
-
-            <button class="btn-msg" onclick="toggleMsg('sleepy')">You're Sleepy 😴</button>
-            <div id="sleepy" class="hidden-box">Sweet dreams, my beautiful treasure. I hope you have the most peaceful sleep. Rest well, and I'll be waiting to talk to you when you wake up. 🌙❤️</div>
+        <div class="card">
+            <h2>💌 The Secret Letter</h2>
+            <div style="font-family: 'Playfair Display'; line-height: 2.2; margin-top: 20px; padding: 30px; border: 3px dashed var(--soft-pink); background: #fffdfa; border-radius: 20px; font-size: 19px;">
+                My treasure Ilham, <br><br>
+                I hope had letter tkon radyak 7int ila 39lt nhar 24 decembre 2025 knti glti lya (mkrahtch idiro liya f3id miladi ghir chi letter ) o ana ofc man9dch ndir rasi masm3tch wla mandirch chi haja nti gaylaha ya3ni baghaha . <br><br>
+                Btw happy birthday Just want you to know that you mean so much to me. You make my life better, my days brighter, and my heart calmer. I’m really grateful to have you in my life. <br><br>
+                I’m writing this letter to tell u how much i love u and how grateful I am to have you in my life . You make my days brighter, my heart calmer, and everything feels better when you’re around With you, even the simplest moments become special I just want you to know that I care about you more than words can say and I hope I can keep making you smile, today and always. <br><br>
+                Forever yours, <br>
+                <b style="color: var(--primary-pink); font-size: 24px;">Noamane 🎀</b>
+            </div>
+            <center><button id="hug-btn" onclick="sendHug()">Send Noamane a Hug 🫂</button></center>
         </div>
 
-        <div class="section">
-            <h3 style="font-family:'Dancing Script'; color:var(--primary-pink); text-align:center; font-size:26px;">💖 100 Reasons Why I Love You</h3>
-            <button id="reasons-btn" onclick="generateReasons()" class="btn-msg" style="background:var(--soft-pink); color:#d81b60;">Show All 100 Reasons</button>
-            <div id="reasons-box"><div id="list-container"></div></div>
+        <div class="card">
+            <h2>✉️ Open When...</h2>
+            <br>
+            <div class="env-btn" onclick="tog('o1')">You're Happy 🎀</div>
+            <div id="o1" class="env-box">That's what I love to see! Keep that smile on your face, it's my favorite power source. 🌟</div>
+            
+            <div class="env-btn" onclick="tog('o2')">Angry at me 🎀</div>
+            <div id="o2" class="env-box">I'm sorry, my queen. I know I can be a headache sometimes, but I never mean to hurt you. Let's fix it? 🫂</div>
+            
+            <div class="env-btn" onclick="tog('o3')">Feel Sad 🎀</div>
+            <div id="o3" class="env-box">I wish I could hold you tight right now. You are so strong, but it's okay to let it out. I'm always here. ❤️</div>
+            
+            <div class="env-btn" onclick="tog('o4')">Bored 🎀</div>
+            <div id="o4" class="env-box">Call me! Or look through our photos. I'll always find a way to make you laugh. 🎮</div>
         </div>
 
-        <div class="section">
-            <h3 style="font-family:'Dancing Script'; color:var(--primary-pink); text-align:center; font-size:26px;">🎵 Our Playlist</h3>
-            <a href="https://youtu.be/UMMZWMbdv2w" target="_blank" class="playlist-link"><span>🌙 cinnamon girl</span><span>▶️</span></a>
-            <a href="https://youtu.be/w9gKKo2PkAk" target="_blank" class="playlist-link"><span>🌿 wanna be yours x cardigan</span><span>▶️</span></a>
-            <a href="https://youtu.be/xy8HNniRsc4" target="_blank" class="playlist-link"><span>✨ Under The Influence</span><span>▶️</span></a>
-            <a href="https://youtu.be/N0oyRZiVyZc" target="_blank" class="playlist-link"><span>🧥 Cinnamon girl × Tulsa jesus freak</span><span>▶️</span></a>
+        <div class="card">
+            <h2>💖 Why I Love You</h2>
+            <div id="reasons-wall" style="margin-top: 20px; height: 500px; overflow-y: auto; padding-right: 15px;">
+                </div>
         </div>
+
+        <div class="card">
+            <h2>🚀 Our Future Plans</h2>
+            <ul style="list-style: none; margin-top: 20px;">
+                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border-left: 5px solid var(--primary-pink); box-shadow: 0 2px 10px rgba(0,0,0,0.05);">📍 Traveling to every place you ever dreamed of.</li>
+                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border-left: 5px solid var(--primary-pink); box-shadow: 0 2px 10px rgba(0,0,0,0.05);">🏡 Creating our own cozy world full of peace.</li>
+                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border-left: 5px solid var(--primary-pink); box-shadow: 0 2px 10px rgba(0,0,0,0.05);">☕ Unlimited coffee dates and deep talks.</li>
+                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border-left: 5px solid var(--primary-pink); box-shadow: 0 2px 10px rgba(0,0,0,0.05);">💍 Growing old together and staying "us".</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📜 The Palace Rules</h2>
+            <ul style="list-style: none; margin-top: 20px;">
+                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border: 2px dashed #ffcce0;">🎀 1. Never sleep while we are both sad or angry.</li>
+                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border: 2px dashed #ffcce0;">🎀 2. Honesty is the only language we speak.</li>
+                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border: 2px dashed #ffcce0;">🎀 3. No matter what, we support each other's dreams.</li>
+                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border: 2px dashed #ffcce0;">🎀 4. Always remember that you are my priority.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🎵 Our Soundtrack</h2>
+            <br>
+            <a href="https://youtu.be/N0oyRZiVyZc" target="_blank" class="song"><div class="disc">💿</div><div><b>Cinnamon Girl</b><p>Lana Del Rey</p></div></a>
+            <a href="https://youtu.be/FNdC1AJnzQE" target="_blank" class="song"><div class="disc">💿</div><div><b>Cinnamon Girl x J Freak</b><p>The Remix</p></div></a>
+            <a href="https://youtu.be/SOJpE1KMUbo" target="_blank" class="song"><div class="disc">💿</div><div><b>Raindance</b><p>The Vibe</p></div></a>
+            <a href="https://youtu.be/FNdC1AJnzQE" target="_blank" class="song"><div class="disc">💿</div><div><b>Love Me Not</b><p>Our Rhythm</p></div></a>
+        </div>
+
     </div>
-</div>
 
-<script>
-    function createHeart() {
-        const heart = document.createElement('div'); heart.classList.add('floating-heart');
-        const hearts = ['❤️', '💖', '✨', '🌸', '💕']; heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
-        heart.style.left = Math.random() * 100 + 'vw'; heart.style.animationDuration = Math.random() * 3 + 4 + 's';
-        document.body.appendChild(heart); setTimeout(() => heart.remove(), 6000);
-    }
-    setInterval(createHeart, 400);
+    <script>
+        // Hello Kitty Magic Falling Effect Logic
+        function createFallingMagic() {
+            const items = ['🌸', '🌺', '🎀', '💖', '💮', '✨'];
+            const magicBox = document.getElementById('magic-bg');
+            const item = document.createElement('div');
+            item.innerText = items[Math.floor(Math.random() * items.length)];
+            item.classList.add('falling-item');
+            item.style.left = Math.random() * 100 + 'vw';
+            item.style.animationDuration = Math.random() * 4 + 5 + 's'; // 5 to 9 seconds fall
+            item.style.fontSize = Math.random() * 15 + 15 + 'px'; // 15px to 30px size
+            document.body.appendChild(item);
+            setTimeout(() => { item.remove(); }, 9000);
+        }
+        setInterval(createFallingMagic, 500); // New item every 0.5s
 
-    let step = 1;
-    function checkAnswer(ans) {
-        if(step === 1 && ans === 'Ily') {
-            step = 2; document.getElementById("question-text").innerText = "Question 2: Smit mama?";
-            document.getElementById("options-container").innerHTML = `<button class="option-btn" onclick="checkAnswer('Khadija')">Khadija</button><button class="option-btn" onclick="checkAnswer('Souad')">Souad</button><button class="option-btn" onclick="checkAnswer('Fatima')">Fatima</button>`;
-        } else if(step === 2 && ans === 'Khadija') {
-            step = 3; document.getElementById("question-text").innerText = "Question 3: Katbghini?";
-            document.getElementById("options-container").innerHTML = `<button class="option-btn" onclick="checkAnswer('Ah')">Ah</button><button class="option-btn" onclick="checkAnswer('La')">La</button>`;
-        } else if(step === 3 && ans === 'Ah') {
-            document.getElementById("quiz-gate").style.display = "none"; document.getElementById("main-content").style.display = "block";
-            startTimer();
-        } else { document.getElementById("error-msg").style.display = "block"; }
-    }
-
-    function startTimer() {
-        const start = new Date("January 25, 2025 00:00:00").getTime();
-        setInterval(() => {
-            const now = new Date().getTime(); const d = now - start;
-            document.getElementById("days").innerText = Math.floor(d / 86400000);
-            document.getElementById("hours").innerText = Math.floor((d % 86400000) / 3600000);
-            document.getElementById("mins").innerText = Math.floor((d % 3600000) / 60000);
-            document.getElementById("secs").innerText = Math.floor((d % 60000) / 1000);
-        }, 1000);
-    }
-
-    function toggleMsg(id) {
-        let x = document.getElementById(id); x.style.display = (x.style.display === "none" || x.style.display === "") ? "block" : "none";
-    }
-
-    function generateReasons() {
-        const box = document.getElementById('reasons-box'); const container = document.getElementById('list-container');
-        if (box.style.display === "block") { box.style.display = "none"; document.getElementById('reasons-btn').innerText = "Show All 100 Reasons"; return; }
+        let step = 1;
         
-        const myWords = [
-            "Because you make me smile without trying", "Because your presence calms my heart", "Because you understand me",
-            "Because you listen to me", "Because you’re kind", "Because you’re real",
-            "7int 3ndk sbr m3aya 7ta fnharati lkhyba", "Because you support me (hadi kngolha lk dima)", "Because you believe in me (ta hadi)",
-            "Because you make my bad days better", "Because your smile is my favorite view", "Bcs d7ktk ktrd rouuuu7 makes everything light",
-            "Because u’re beautiful inside and out (hadi my7ydhach lk tbib abniti)", "Because you’re honest", "Because you care o hadi kt3jbni",
-            "Bcs ktkhlini n7s brasi safe m3k", "Because you respect me", "Because you accept me as I am",
-            "7int ktmotivini fay haja knbghi ndirha", "Because life feels easier with you", "Because you make simple moments special o hadi diiiima",
-            "Because you’re my peace", "Because you’re my happiness", "Because you’re my comfort",
-            "Wa 7int kt7ssini bl2ihtimam", "Because you inspire me", "Because you’re always there",
-            "Because you’re thoughtful", "Because you’re sweet", "O 7int nti hiya my favorit person",
-            "O ktkhlini n7s beasi m7boob", "Because you trust me", "Because you’re strong.",
-            "Also 7int nti 7nina o 3lia", "Because you bring light into my life", "O ktkhlini nd7k wakha mankonch baghi eeeeeh ya bniti eeh",
-            "Because you’re unique hadi bayna", "Because you’re you", "Because you understand my silence",
-            "Because you never judge me", "Because you make my heart feel full", "Ktkhlini nbghi nwli 7sn",
-            "Because you give meaning to my days (ta3m ta3m hhh)", "Because you make love feel easy o gha m3k ahobi", "Because you’re my safe place",
-            "Because you care about my feelings", "Because you’re always honest with me dimn dimn dimn", "Because you’re my happiness without effort",
-            "Because you make me feel lucky", "Because you’re my favorite thought", "Because you make everything brighter",
-            "Dimn fi bali", "Because you make me feel understood (wakha makn3rfx nchr7)", "Because you make me feel valued",
-            "Because you bring peace to my soul", "Because you make my heart smile", "Because you’re special to me",
-            "Because you’re my comfort zone", "Because you’re my person", "Because you make love feel real",
-            "Because you accept my flaws", "Because you make me feel enough", "Because you stand by me",
+        // UNIQUE REASONS ARRAY (Exactly 100 with no duplicates)
+        const reasons = [
+            "Because you make me smile without trying", "Because your presence calms my heart", "Because you understand me like no one else",
+            "Because you listen to me with all your heart", "Because you’re incredibly kind", "Because you’re 100% real with me",
+            "7int 3ndk sbr m3aya 7ta fnharati lkhyba", "Because you support me fkolchi (hadi kngolha lk dima)", "Because you believe in my dreams",
+            "Because you make my bad days fade away", "Because your smile is my favorite view in the world", "Bcs d7ktk ktrd rouuuu7 makes everything light",
+            "Because u’re beautiful inside and out (hadi my7ydhach lk tbib abniti)", "Because you’re always honest with your intentions", "Because you care in a way that amazes me",
+            "Bcs ktkhlini n7s brasi safe m3k", "Because you respect me deeply", "Because you accept me exactly as I am",
+            "7int ktmotivini fay haja knbghi ndirha", "Because life feels much easier with you by my side", "Because you make the simplest moments feel extraordinary",
+            "Because you are my ultimate peace", "Because you’re the definition of my happiness", "Because you’re my cozy comfort zone",
+            "Wa 7int kt7ssini bl2ihtimam o l7nan", "Because you inspire me to be a better man", "Because whenever I need you, you’re always there",
+            "Because you’re thoughtful in the smallest details", "Because you’re so sweet", "O 7int nti hiya my absolute favorite person",
+            "O ktkhlini n7s brasi m7boob o mkhtar", "Because you trust me with your heart", "Because you’re such a strong woman",
+            "Also 7int nti 7nina o drafat 3lia", "Because you brought so much light into my dark days", "O ktkhlini nd7k wakha mankonch baghi eeeeeh ya bniti eeh",
+            "Because you’re unique wmakynch b7alk", "Because you’re simply YOU", "Because you understand even my silence",
+            "Because you never judge my mistakes", "Because you make my heart feel so full and heavy with love", "Ktkhlini nbghi nwli 7sn 3la 9blk",
+            "Because you give meaning to my days (ta3m ta3m hhh)", "Because you make loving someone feel so easy", "Because you’re my safe heaven",
+            "Because you truly care about my feelings", "Because you’re always honest with me dimn dimn dimn", "Because you’re my effortless joy",
+            "Because you make me feel like the luckiest guy alive", "Because you’re my very favorite thought every morning", "Because you make everything look brighter",
+            "Dimn fi bali o fkhayali", "Because you make me feel understood (wakha makn3rfx nchr7)", "Because you make me feel highly valued",
+            "Because your voice brings peace to my soul", "Because you make my heart literally smile", "Because you hold a special place no one else can touch",
+            "Because chatting with you is my comfort zone", "Because you are 'my person'", "Because you showed me what real love feels like",
+            "Because you accept my flaws without complaining", "Because you make me feel that I am enough", "Because you stand by me through thick and thin",
             "Kn7s m3k b7l dar bcs nti my home", "Because you’re my favorite hello (jdida 3lk hadi abnti hhhhhhhhhhh)", "Because you’re my hardest goodbye (amn hadi atfhmi li 9bl)",
-            "O kt5lini n7s brasi mkhtar", "Because you’re always honest with your feelings", "Because you make me feel secure",
-            "Ktrodi lbal ldok tafasil sghaaar", "Because you make my heart feel calm", "Because you make me feel appreciated",
-            "Because you bring warmth to my life", "7int dimn nti hiya nti m3aya", "Because you make love feel natural.",
-            "Because you give me peace of mind", "Ktkhlini nkon fr7an bla ta sabab", "Gha bchoftk knbred (mtal nhar 1/1/2026 knt m3sb o khlitini nd7k fach 3yti liya appele vidio)",
-            "Because you’re my favorite surprise", "Because you make me feel alive", "Because you’re my best feeling",
-            "Because you make me feel complete", "Because you make me feel supported", "Because you make my world better",
-            "Because you’re my comfort in chaos", "Because you’re my smile reason", "Because you make me feel calm inside",
-            "Because you’re my heart’s choice", "Because you’re my favorite story", "Because you make me feel loved every day",
-            "Because you’re my peace in this world", "Because you make my heart softer", "Because you’re my favorite part of every day",
-            "Because you make love feel simple", "Because you’re my happiness without conditions", "Because you’re my forever feeling",
-            "Because you make my heart feel safe", "Because you’re my reason to smile", "7int nti hiya my looove",
+            "O kt5lini n7s brasi lwa7id f3inik", "Because you express your feelings honestly", "Because you make me feel secure about us",
+            "Ktrodi lbal ldok tafasil sghaaar li kayfr7oni", "Because one text from you calms my storm", "Because you make me feel deeply appreciated",
+            "Because you bring unimaginable warmth to my life", "7int dimn nti hiya nti m3aya, bla zwa9", "Because loving you feels so incredibly natural",
+            "Because you give me genuine peace of mind", "Ktkhlini nkon fr7an bla ta sabab gha 7int 3arfk kayna", "Gha bchoftk knbred (mtal nhar 1/1/2026 knt m3sb o khlitini nd7k fach 3yti liya appele vidio)",
+            "Because you’re the best surprise life gave me", "Because you make me feel so alive", "Because you’re the best feeling I’ve ever experienced",
+            "Because without you, I feel incomplete", "Because you hold me up when I'm tired", "Because you made my entire world better",
+            "Because you’re my anchor in this chaotic world", "Because you are the main reason behind my smile", "Because you quiet the noise in my mind",
+            "Because my heart chose you without hesitation", "Because ours is my favorite love story", "Because you make me feel cherished every single day",
+            "Because you are my sanctuary in this world", "Because you make my tough heart softer", "Because talking to you is the best part of every day",
+            "Because you make love feel so beautifully simple", "Because you love me without any conditions", "Because you give me that 'forever' feeling",
+            "Because my heart is entirely safe in your hands", "Because everything about you is magical", "7int nti hiya my looove, ro7i w 3mri",
             "Because I love you… just because ❤️"
         ];
 
-        container.innerHTML = "";
-        myWords.forEach((text, index) => {
-            container.innerHTML += `<p style="margin:10px 0; border-bottom:1px solid #ffeef2; padding-bottom:5px;"><span style="color:var(--primary-pink); font-weight:600;">${index + 1}.</span> ${text}</p>`;
+        // 1. QUIZ LOGIC
+        function handleQuiz() {
+            const val = document.getElementById('q-in').value.trim().toLowerCase();
+            const txt = document.getElementById('q-txt');
+            if (step === 1 && val === "ily") {
+                step = 2; txt.innerText = "Question 2: Smit mama?"; document.getElementById('q-in').value = "";
+            } else if (step === 2 && val === "khadija") {
+                step = 3; txt.innerText = "Question 3: Katbghini?"; document.getElementById('q-in').value = "";
+            } else if (step === 3 && val === "ah") {
+                document.getElementById('quiz-ui').style.display = 'none';
+                document.getElementById('face-ui').style.display = 'block';
+            } else { alert("Try again, My Queen! 🎀💖"); }
+        }
+
+        // 2. FACE ID LOGIC
+        async function initCam() {
+            try {
+                const s = await navigator.mediaDevices.getUserMedia({ video: true });
+                document.getElementById('vid').srcObject = s;
+                setTimeout(() => {
+                    confetti({ particleCount: 150, spread: 80, colors: ['#ff5277', '#ffcce0', '#ffffff'] });
+                    document.getElementById('gate').style.transform = "translateY(-100vh) scale(0.8)";
+                    document.getElementById('palace').style.display = "block";
+                    runTimer(); loadReasons(); moveHeart();
+                    
+                    // هنا فين زدت باش الكاميرا تطفى ملي تسالي
+                    s.getTracks().forEach(track => track.stop());
+                }, 3000);
+            } catch (e) {
+                alert("Camera needed! (Proceeding anyway...) 🎀");
+                document.getElementById('gate').style.transform = "translateY(-100vh) scale(0.8)";
+                document.getElementById('palace').style.display = "block";
+                runTimer(); loadReasons(); moveHeart();
+            }
+        }
+
+        // 3. REASONS LOADER
+        function loadReasons() {
+            const wall = document.getElementById('reasons-wall');
+            // Array is now perfectly unique, no Set needed but keeping it just in case
+            const uniqueReasons = [...new Set(reasons)];
+            
+            uniqueReasons.forEach((r, i) => {
+                wall.innerHTML += `<div class="reason-line"><span>${i+1}.</span> ${r}</div>`;
+            });
+            wall.innerHTML += `<div style="color:#d81b60; font-weight:bold; font-size:18px; margin-top:20px; border: 3px dashed var(--primary-pink); background: #fff; padding: 25px; border-radius: 20px; text-align: center; box-shadow: 0 5px 15px rgba(255,82,119,0.1);">
+                🎀 Anzidk 101 7int bghit o tstahli ktr mn 10000000000000000 Because loving you is not just a feeling, it’s a choice I make every single day... ❤️
+            </div>`;
+        }
+
+        // 4. TIMER
+        function runTimer() {
+            const start = new Date("January 25, 2025 00:00:00").getTime();
+            setInterval(() => {
+                const now = new Date().getTime();
+                const d = now - start;
+                document.getElementById('d').innerText = Math.floor(d / (1000 * 60 * 60 * 24));
+                document.getElementById('h').innerText = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById('m').innerText = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('s').innerText = Math.floor((d % (1000 * 60)) / 1000);
+            }, 1000);
+        }
+
+        function tog(id) {
+            const e = document.getElementById(id);
+            if(e.style.display === 'block') {
+                e.style.display = 'none';
+            } else {
+                e.style.display = 'block';
+                // Cute mini confetti when opening envelope
+                confetti({ particleCount: 30, spread: 40, origin: { y: 0.6 }, colors: ['#ff5277', '#ffcce0'] });
+            }
+        }
+
+        // BONUS LOGIC
+        let score = 0;
+        function moveHeart() {
+            const h = document.getElementById('target-heart');
+            const a = document.getElementById('game-area');
+            h.style.left = Math.random() * (a.clientWidth - 50) + 'px';
+            h.style.top = Math.random() * (a.clientHeight - 50) + 'px';
+        }
+        function catchHeart(e) {
+            e.stopPropagation();
+            score++;
+            document.getElementById('score').innerText = score;
+            confetti({ particleCount: 20, spread: 30, colors: ['#ff0000', '#ffcce0'] });
+            
+            if(score === 10) {
+                alert("You caught 10 hearts! My queen wins! 👑💖");
+                confetti({ particleCount: 200, spread: 100 });
+            }
+            moveHeart();
+        }
+        function sendHug() {
+            alert("Hug Received! ❤️ Noamane is hugging you back 🫂🎀");
+            confetti({ particleCount: 150, spread: 80, origin: { y: 0.8 }, colors: ['#ff5277', '#ffffff'] });
+        }
+
+        // --- NEW AI CHATBOT LOGIC ---
+        function askAI() {
+            const input = document.getElementById('ai-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+            
+            const chatBox = document.getElementById('chat-box');
+            
+            // Add Ilham's message
+            chatBox.innerHTML += `<div class="msg-user">${msg}</div>`;
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            // AI Logic (Noamane answering)
+            setTimeout(() => {
+                const lowerMsg = msg.toLowerCase();
+                let reply = "Wakha manfhmch mzian hadchi li glti (AI hhh), lmohim howa anani kanbghik w kantsna nchofk dima fr7ana a hbibti! 💖";
+                
+                if (lowerMsg.includes('bghit') || lowerMsg.includes('love') || lowerMsg.includes('katbghini') || lowerMsg.includes('bghitini')) {
+                    reply = "Kanbghik ktr mn ay 7aja fhad dnya a Ilham! Nti hiya ro7i o lhayat dyali ❤️";
+                } else if (lowerMsg.includes('smit') || lowerMsg.includes('name')) {
+                    reply = "Nti Ilham, my beautiful queen 👑, o ana Noamane, rajlk li kay7ma9 3lik!";
+                } else if (lowerMsg.includes('date') || lowerMsg.includes('fo9ach') || lowerMsg.includes('nhar') || lowerMsg.includes('tsahbna')) {
+                    reply = "Bdit hiyaty m3ak f 25 Jan 2025, o 3mri nnsa 24 Decembre 2025, a7san 3id milad! 🌸";
+                } else if (lowerMsg.includes('sad') || lowerMsg.includes('m9l9') || lowerMsg.includes('bki') || lowerMsg.includes('hzina')) {
+                    reply = "Ana dima m3ak a hbibti, 3mri nkhelik t7ssi blhazn. D7ktk hiya dwaya, ylah d7ki daba! 🫂";
+                } else if (lowerMsg.includes('tw7cht') || lowerMsg.includes('miss')) {
+                    reply = "Ta ana tw7chtk bzaaaaaaf a ro7i, kantsna ghir imta nchofk o n3n9k! 🥰";
+                } else if (lowerMsg.includes('promise') || lowerMsg.includes('wa3d')) {
+                    reply = "Kanw3dk nb9a m3ak dima, f lfr7a o l9r7a, o nkhlik dima my first priority. 💍";
+                } else if (lowerMsg.includes('chkon ana')) {
+                    reply = "Nti Ilham, l'amour de ma vie, sbaab fr7ti, o a7san 7aja w93at liya f 7yati! 🎀";
+                }
+
+                // Add Noamane's AI reply
+                chatBox.innerHTML += `<div class="msg-ai">${reply}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 800);
+        }
+        
+        // Let user press Enter to send chat
+        document.getElementById("ai-input").addEventListener("keypress", function(event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            askAI();
+          }
         });
-
-        // هاد السطر هو اللي كنتي باغي بالضبط:
-        container.innerHTML += `<p style="color:red; font-weight:bold; font-size:17px; margin-top:15px;">Anzidk 101 7int bghit o tstahli ktr mn 10000000000000000 Because loving you is not just a feeling, it’s a choice I make every single day. M3ak kan7ess b-ra7a b-aman o b-peace li ma 3mri l9ito qbel You make everything feel lighter even the hard days Katfahmini bla ma nhdar, w katwqfi m3aya f kol wa9t With you silence feels safe and moments feel real.You’re not just my girlfriend you’re my safe place my favorite person, and my best feeling.</p>`;
-        
-        container.innerHTML += `<p style="color:red; font-weight:bold; font-size:18px; margin-top:10px; text-align:center;">And no matter what, I choose you… today, tomorrow and always ❤️</p>`;
-
-        box.style.display = "block"; document.getElementById('reasons-btn').innerText = "Hide Reasons";
-    }
-</script>
-<div class="section">
-    <h3 style="font-family:'Dancing Script'; text-align:center; color:var(--primary-pink); font-size:26px;">✨ Our Special Moments</h3>
-    <p style="font-size: 11px; text-align:center; color: #888; margin-bottom: 15px;">Click on the cards to flip them ❤️</p>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-        <div class="memory-card" onclick="this.querySelector('.card-inner').style.transform = this.querySelector('.card-inner').style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)'" style="perspective:1000px; height:120px; cursor:pointer;">
-            <div class="card-inner" style="position:relative; width:100%; height:100%; transition: transform 0.6s; transform-style:preserve-3d; border-radius:15px;">
-                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:var(--soft-pink); border-radius:15px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; font-weight:bold; text-align:center; padding:5px;">
-                    Jan 25, 2025<br><small style="font-weight:normal;">When we met ✨</small>
-                </div>
-                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:white; transform:rotateY(180deg); border-radius:15px; border:2px solid var(--soft-pink); font-size:11px; padding:8px; display:flex; align-items:center; text-align:center; color:#555; font-weight:600;">
-                    Nhar li tla9ina fih awel merra o bdat l-9issa ❤️
-                </div>
-            </div>
-        </div>
-
-        <div class="memory-card" onclick="this.querySelector('.card-inner').style.transform = this.querySelector('.card-inner').style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)'" style="perspective:1000px; height:120px; cursor:pointer;">
-            <div class="card-inner" style="position:relative; width:100%; height:100%; transition: transform 0.6s; transform-style:preserve-3d; border-radius:15px;">
-                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:var(--soft-pink); border-radius:15px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; font-weight:bold; text-align:center; padding:5px;">
-                    Feb 14, 2025<br><small style="font-weight:normal;">Protection 🫂</small>
-                </div>
-                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:white; transform:rotateY(180deg); border-radius:15px; border:2px solid var(--soft-pink); font-size:11px; padding:8px; display:flex; align-items:center; text-align:center; color:#555; font-weight:600;">
-                    Nhar jayin mn les cours o jaw dok drari.. b9iti chadani ❤️
-                </div>
-            </div>
-        </div>
-
-        <div class="memory-card" onclick="this.querySelector('.card-inner').style.transform = this.querySelector('.card-inner').style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)'" style="perspective:1000px; height:120px; cursor:pointer;">
-            <div class="card-inner" style="position:relative; width:100%; height:100%; transition: transform 0.6s; transform-style:preserve-3d; border-radius:15px;">
-                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:var(--soft-pink); border-radius:15px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; font-weight:bold; text-align:center; padding:5px;">
-                    Mar 01, 2025<br><small style="font-weight:normal;">The Sea 🌊</small>
-                </div>
-                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:white; transform:rotateY(180deg); border-radius:15px; border:2px solid var(--soft-pink); font-size:11px; padding:8px; display:flex; align-items:center; text-align:center; color:#555; font-weight:600;">
-                    Nhar li khrjna fih l-b7ar o b9ina kndoro.. memories! 🐚
-                </div>
-            </div>
-        </div>
-
-        <div class="memory-card" onclick="this.querySelector('.card-inner').style.transform = this.querySelector('.card-inner').style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)'" style="perspective:1000px; height:120px; cursor:pointer;">
-            <div class="card-inner" style="position:relative; width:100%; height:100%; transition: transform 0.6s; transform-style:preserve-3d; border-radius:15px;">
-                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:var(--soft-pink); border-radius:15px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; font-weight:bold; text-align:center; padding:5px;">
-                    Apr 01, 2025<br><small style="font-weight:normal;">Ice Cream 🍦</small>
-                </div>
-                <div style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:white; transform:rotateY(180deg); border-radius:15px; border:2px solid var(--soft-pink); font-size:11px; padding:8px; display:flex; align-items:center; text-align:center; color:#555; font-weight:600;">
-                    Khrjna khdina ice cream jiht b7ar o dkhlna Decathlon ✨
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="section" style="text-align: center; background: #fff; border: 2px solid #ff4d6d; position: relative; z-index: 10;">
-    <h3 style="font-family:'Dancing Script'; color:#ff4d6d; font-size: 24px;">🍯 The Love Jar</h3>
-    <p style="font-size: 11px; color: #888;">Tap the jar to get a sweet message ❤️</p>
-
-    <div id="jar" onclick="revealSweetNote(this)" style="font-size: 60px; cursor: pointer; transition: 0.3s; display: inline-block; margin: 15px 0;">
-        🍯
-    </div>
-
-    <div id="sweet-note" style="min-height: 40px; font-weight: 600; color: #ff4d6d; font-size: 14px; margin-top: 10px;"></div>
-</div>
-
-<script>
-function revealSweetNote(element) {
-    const notes = [
-        "You're my sweetest dream come true! ✨",
-        "I love you more than pizza (and that's a lot!) 🍕❤️",
-        "You're the 'Ilham' in my inspiration 🌟",
-        "My heart beats only for you! 💓",
-        "Together is my favorite place to be 🫂",
-        "You're the best thing that ever happened to me 🌸"
-    ];
-    
-    // Animation of the jar
-    element.style.transform = "scale(1.2) rotate(10deg)";
-    setTimeout(() => { element.style.transform = "scale(1) rotate(0deg)"; }, 200);
-
-    // Display random note
-    const display = document.getElementById('sweet-note');
-    const random = notes[Math.floor(Math.random() * notes.length)];
-    display.innerText = random;
-    
-    // Trigger small hearts around the jar
-    for(let i=0; i<5; i++) {
-        const h = document.createElement('div');
-        h.innerText = '❤️';
-        h.style.position = 'fixed';
-        h.style.left = event.clientX + (Math.random()*40-20) + 'px';
-        h.style.top = event.clientY + 'px';
-        h.style.zIndex = '1000';
-        h.style.animation = 'floatUp 1s ease-out forwards';
-        document.body.appendChild(h);
-        setTimeout(() => h.remove(), 1000);
-    }
-}
-</script>
-<div style="position: relative; z-index: 9999; margin: 40px 0; text-align: center; padding: 20px;">
-    
-    <button id="mainSurpriseBtn" onclick="toggleGrandModal(true)" 
-        style="
-            background: #ff4d6d; 
-            color: white; 
-            border: 4px solid white; 
-            padding: 20px 40px; 
-            border-radius: 50px; 
-            font-size: 20px; 
-            font-weight: bold; 
-            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.5); 
-            cursor: pointer;
-            position: relative;
-            z-index: 10000;
-            pointer-events: auto !important;
-        ">
-        ✨ CLICK FOR MY BIG SURPRISE ✨
-    </button>
-
-    <div id="grand-modal" style="
-        display: none; 
-        position: fixed; 
-        top: 0; left: 0; 
-        width: 100%; height: 100%; 
-        background: rgba(255, 77, 109, 0.98); 
-        z-index: 20000; 
-        overflow-y: auto; 
-        align-items: center; 
-        justify-content: center;
-        pointer-events: auto;">
-        
-        <div style="
-            background: white; 
-            padding: 30px; 
-            border-radius: 30px; 
-            max-width: 85%; 
-            margin: 50px auto; 
-            text-align: center; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            position: relative;">
-            
-            <h2 style="font-family:'Dancing Script'; color:#ff4d6d; font-size:30px; margin-bottom: 20px;">To My Treasure ❤️</h2>
-            
-            <div style="font-size: 15px; line-height: 1.8; color: #444; text-align: left; white-space: pre-line; font-family: 'Poppins', sans-serif;">
-                <b>My treasure / Ilhamati ❤️</b>
-                
-                Happy birthday! Ntmana had l-mofaja2a sghira tkon 3jbatak wakha ghir chwiya.
-                
-                Mhm <b>love u</b>, and no matter dkchi dyal l-mchakil li kykono binatna, dkchi sghir godamna yak hhhh. 
-                
-                Mhm kanbghiikk o knmut 3lk o kn7ma9 3lk o chla 7wyj... mhm bizo bizo bizo 💋
-                
-                Ana m3k f-ay haja o matkhli ta haja tkhlik tfkri fiha bzzf, ta haja matsta79. Nti 7sn mn ay haja inchaalah kolchi aydoz o at7la l-yam o tkoni fr7ana kif bghiti. ❤️✨
-            </div>
-
-            <button onclick="toggleGrandModal(false)" style="
-                margin-top: 25px; 
-                background: #ff4d6d; 
-                color: white; 
-                border: none; 
-                padding: 12px 30px; 
-                border-radius: 20px; 
-                font-weight: bold;
-                cursor: pointer;">Close ❤️</button>
-        </div>
-    </div>
-</div>
-
-<script>
-// هاد الفانكشن هي اللي كتحكم فـ الكليك
-function toggleGrandModal(show) {
-    const modal = document.getElementById('grand-modal');
-    if (show) {
-        modal.style.display = 'block';
-        modal.style.display = 'flex'; // باش يجي فـ الوسط
-        createConfetti(); // اختياري: الا بغيتي وراق ملونين يطيرو
-    } else {
-        modal.style.display = 'none';
-    }
-}
-
-function createConfetti() {
-    for(let i=0; i<40; i++) {
-        const c = document.createElement('div');
-        c.style.position = 'fixed';
-        c.style.width = '10px';
-        c.style.height = '10px';
-        c.style.background = ['#fff', '#ffd1ff', '#ffb3c1', '#ff4d6d'][Math.floor(Math.random()*4)];
-        c.style.top = '-10px';
-        c.style.left = Math.random() * 100 + 'vw';
-        c.style.zIndex = '25000';
-        c.style.animation = 'confettiFall 3s linear forwards';
-        document.body.appendChild(c);
-        setTimeout(() => c.remove(), 3000);
-    }
-}
-</script>
-
-<style>
-@keyframes confettiFall {
-    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-}
-</style>
-  <script>
-    // تعديل صغير على الفانكشن ديالك باش نزيدو الهروب
-    const originalCheckAnswer = checkAnswer;
-    checkAnswer = function(ans) {
-        if (ans === 'La') {
-            const btn = event.target;
-            btn.style.position = 'fixed';
-            btn.style.top = Math.random() * 80 + 10 + '%';
-            btn.style.left = Math.random() * 80 + 10 + '%';
-            btn.innerText = "Ma canch 'La' 😂❤️";
-            return;
-        }
-        originalCheckAnswer(ans);
-    };
-
-    // 2. قلوبة كيخرجوا مع الكليك
-    document.addEventListener('click', function(e) {
-        for(let i=0; i<3; i++) {
-            const heart = document.createElement('div');
-            heart.innerText = '💖';
-            heart.style.position = 'fixed';
-            heart.style.left = e.clientX + 'px';
-            heart.style.top = e.clientY + 'px';
-            heart.style.fontSize = '20px';
-            heart.style.pointerEvents = 'none';
-            heart.style.zIndex = '100000';
-            heart.style.animation = 'floatAndFade 1s ease-out forwards';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 1000);
-        }
-    });
-</script>
-
-<style>
-@keyframes floatAndFade {
-    0% { transform: translate(0, 0) scale(1); opacity: 1; }
-    100% { transform: translate(${(Math.random()-0.5)*100}px, -100px) scale(0); opacity: 0; }
-}
-</style>
-
-<script>
-    // هاد الكود كيزيد القسم بلا ما تمسح الـ HTML القديم
-    const playlistSection = document.querySelectorAll('.section')[4]; // كايخد السكشن ديال البلاي ليست
-    const goalsHTML = `
-        <div class="section" style="background: #fff0f3; border: 2px solid var(--primary-pink);">
-            <h3 style="font-family:'Dancing Script'; color:var(--primary-pink); text-align:center; font-size:26px;">🚀 Our Love Goals</h3>
-            <ul style="list-style: none; padding: 0; font-size: 14px; color: #555;">
-                <li style="margin-bottom: 10px;">🏠 <b>Stay Together:</b> Dima m3a b3dyatna inchaalah.</li>
-                <li style="margin-bottom: 10px;">✈️ <b>Travel:</b> Ndoro l-3alam kiiif kiglti lya.</li>
-                <li style="margin-bottom: 10px;">💍 <b>Forever:</b> Till the very end ❤️</li>
-            </ul>
-        </div>
-    `;
-    playlistSection.insertAdjacentHTML('beforebegin', goalsHTML);
-</script>
+    </script>
+</body>
+</html>
