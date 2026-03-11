@@ -4,547 +4,774 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Eternal Palace | Ilham & Noamane 👑</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Pacifico&family=Playfair+Display:ital,wght@1,700&family=Montserrat:wght@900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-
-    <style>
-        :root {
-            --primary-pink: #ff5277; /* Hello Kitty Pink */
-            --soft-pink: #ffcce0;
-            --bg-light: #ffe6f0;
-            --white: #ffffff;
-            --dark: #4a4a4a;
-            --shadow: 0 15px 40px rgba(255, 82, 119, 0.25);
-        }
-
-        /* GENERAL STYLING & HELLO KITTY VIBES */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--soft-pink);
-            /* Hello Kitty cute polka dot background */
-            background-image: radial-gradient(var(--white) 15%, transparent 16%);
-            background-size: 30px 30px;
-            color: var(--dark);
-            overflow-x: hidden;
-            /* Cute Heart Cursor */
-            cursor: url('https://cdn-icons-png.flaticon.com/32/833/833472.png'), auto;
-        }
-
-        a, button, .env-btn, .moving-heart, input {
-            cursor: url('https://cdn-icons-png.flaticon.com/32/833/833472.png'), pointer !important;
-        }
-
-        /* Visibility Fixes */
-        p, b, span, div, li { font-size: 18px; line-height: 1.7; color: #444; }
-        h1, h2 { 
-            font-family: 'Pacifico', cursive; 
-            color: var(--primary-pink); 
-            text-align: center; 
-            text-shadow: 2px 2px 0px #fff; /* Cute text shadow */
-        }
-
-        /* SECURITY GATE */
-        #gate {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--soft-pink), var(--primary-pink));
-            z-index: 1000000; display: flex; align-items: center; justify-content: center;
-            transition: 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Bouncy exit */
-        }
-
-        .auth-card {
-            background: var(--white); padding: 40px; border-radius: 40px;
-            width: 90%; max-width: 450px; text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15); 
-            border: 6px dashed var(--primary-pink); /* Hello kitty dashed border */
-            position: relative;
-        }
-
-        /* Hello kitty bow on top of auth card */
-        .auth-card::before {
-            content: '🎀';
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 50px;
-            animation: bounce 2s infinite ease-in-out;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translate(-50%, 0); }
-            50% { transform: translate(-50%, -10px); }
-        }
-
-        .cam-box {
-            width: 200px; height: 200px; border-radius: 50%;
-            border: 5px dashed var(--primary-pink); margin: 20px auto;
-            background: #ffe6f0; overflow: hidden; position: relative; display: none;
-        }
-        #vid { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
-        .scan-line {
-            position: absolute; top: 0; width: 100%; height: 4px;
-            background: var(--primary-pink); box-shadow: 0 0 15px var(--primary-pink);
-            animation: scan 2s infinite linear;
-        }
-        @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
-
-        .in-style {
-            width: 100%; padding: 18px; border-radius: 30px; border: 3px solid #ffe6f0;
-            margin-bottom: 20px; font-size: 18px; text-align: center; font-weight: 600;
-            outline: none; transition: 0.3s;
-        }
-        .in-style:focus { border-color: var(--primary-pink); background: #fffafb; }
-        
-        .btn-style {
-            width: 100%; padding: 18px; border-radius: 30px; border: none;
-            background: var(--primary-pink); color: white; font-weight: 800;
-            font-size: 18px; box-shadow: 0 8px 0 #d81b60;
-            transition: 0.2s;
-        }
-        .btn-style:hover { transform: translateY(3px); box-shadow: 0 5px 0 #d81b60; }
-        .btn-style:active { transform: translateY(8px); box-shadow: 0 0 0 #d81b60; }
-
-        /* PALACE CONTENT */
-        #palace { display: none; max-width: 850px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 10;}
-
-        .card {
-            background: rgba(255, 255, 255, 0.95); border-radius: 40px; padding: 40px;
-            margin-bottom: 50px; box-shadow: var(--shadow); 
-            border: 4px dashed #ffcce0;
-            position: relative;
-            backdrop-filter: blur(5px);
-            transition: transform 0.3s;
-        }
-        .card:hover { transform: scale(1.02); border-color: var(--primary-pink); }
-        
-        /* Spinning flower decoration for every card */
-        .card::after {
-            content: '🌸';
-            position: absolute;
-            top: -20px;
-            right: -15px;
-            font-size: 40px;
-            animation: spin 8s linear infinite;
-        }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        /* TIMER & REASONS */
-        .timer-grid { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .t-box { 
-            background: #fff; border: 3px solid var(--soft-pink);
-            width: 120px; padding: 20px; border-radius: 30px; text-align: center;
-            box-shadow: 0 5px 15px rgba(255, 82, 119, 0.1);
-        }
-        .t-box b { display: block; font-size: 35px; color: var(--primary-pink); font-family: 'Montserrat', sans-serif;}
-
-        .reason-line { 
-            padding: 15px 10px; border-bottom: 2px dashed #ffeef2; 
-            font-weight: 500; display: flex; gap: 10px; transition: 0.3s;
-            border-radius: 10px;
-        }
-        .reason-line:hover { background: #fff0f5; transform: translateX(5px); }
-        .reason-line span { color: var(--primary-pink); font-weight: 800; }
-
-        /* OPEN WHEN & PLAYLIST */
-        .env-btn {
-            width: 100%; padding: 20px; background: #fff0f5; border-radius: 25px;
-            margin-bottom: 15px; border: 3px solid var(--soft-pink);
-            display: flex; justify-content: space-between; font-weight: 700;
-            transition: 0.3s; box-shadow: 0 4px 0 var(--soft-pink);
-        }
-        .env-btn:hover { background: var(--primary-pink); color: white; border-color: var(--primary-pink); }
-        .env-box { display: none; padding: 25px; background: #fff; border-radius: 25px; border: 3px dashed var(--primary-pink); margin-bottom: 20px; font-weight: bold;}
-
-        .song {
-            display: flex; align-items: center; padding: 15px; background: #fff;
-            border-radius: 25px; margin-bottom: 15px; text-decoration: none; color: inherit;
-            border: 2px solid #ffe6f0; transition: 0.3s;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
-        }
-        .song:hover { transform: translateX(10px); background: #fff0f5; border-color: var(--primary-pink); }
-        .disc { width: 50px; height: 50px; background: var(--primary-pink); border-radius: 50%; margin-right: 15px; animation: rot 4s infinite linear; border: 4px solid #fff; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
-        @keyframes rot { from { transform: rotate(0); } to { transform: rotate(360deg); } }
-
-        /* KITTY */
-        .kitty { position: fixed; bottom: 20px; right: 20px; width: 130px; z-index: 999; pointer-events: none; animation: float 3s infinite ease-in-out; filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.2)); }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-
-        /* BONUS STYLES */
-        #game-area {
-            width: 100%; height: 250px; background: #fff0f5; border-radius: 20px;
-            position: relative; overflow: hidden; border: 4px dashed var(--primary-pink);
-            margin-top: 20px; 
-        }
-        .moving-heart {
-            position: absolute; font-size: 35px; transition: 0.1s;
-            user-select: none; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
-        }
-        .score-board { font-weight: 800; color: var(--primary-pink); text-align: center; font-size: 22px; background: #fff; display: inline-block; padding: 5px 20px; border-radius: 20px; border: 2px solid var(--soft-pink); margin-top: 10px;}
-        
-        #hug-btn {
-            background: var(--primary-pink); color: white; border: none; padding: 15px 30px;
-            border-radius: 50px; font-weight: 800; font-size: 18px; margin-top: 20px;
-            transition: 0.3s; box-shadow: 0 8px 0 #d81b60;
-        }
-        #hug-btn:hover { transform: scale(1.05); }
-        #hug-btn:active { transform: translateY(5px); box-shadow: 0 3px 0 #d81b60; }
-
-        /* MAGICAL FALLING FLOWERS & HEARTS */
-        .falling-item {
-            position: fixed; top: -10%; z-index: 1; user-select: none; pointer-events: none;
-            animation: fall linear forwards; opacity: 0.8;
-        }
-        @keyframes fall {
-            0% { transform: translateY(-10vh) rotate(0deg) translateX(0); }
-            100% { transform: translateY(110vh) rotate(360deg) translateX(50px); }
-        }
-        
-        /* AI CHAT STYLES */
-        .chat-container {
-            height: 250px; overflow-y: auto; background: #fffafb; border: 2px dashed var(--soft-pink); 
-            padding: 15px; border-radius: 20px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px;
-        }
-        .msg-ai { background: var(--primary-pink); color: white; padding: 10px 15px; border-radius: 15px 15px 15px 0; align-self: flex-start; max-width: 80%; font-size: 16px; }
-        .msg-user { background: #ffe6f0; color: var(--dark); padding: 10px 15px; border-radius: 15px 15px 0 15px; align-self: flex-end; max-width: 80%; border: 1px solid var(--primary-pink); font-size: 16px; }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
 </head>
 <body>
+    <!-- Floating Hearts Background -->
+    <div class="floating-hearts" id="floatingHearts"></div>
+    
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
 
-    <div id="magic-bg"></div>
-
-    <img src="https://i.pinimg.com/originals/9e/7c/ae/9e7cae834618e4785461160358482df7.gif" class="kitty">
-
-    <div id="gate">
-        <div class="auth-card">
-            <div id="quiz-ui">
-                <h2 style="margin-bottom: 20px;">Palace Security 🔐</h2>
-                <p id="q-txt" style="margin-bottom: 20px; font-weight: 700;">Question 1: Chno smiya li msmiha 3lk?</p>
-                <input type="text" id="q-in" class="in-style" placeholder="Your Answer...">
-                <button class="btn-style" onclick="handleQuiz()">Verify 🎀</button>
-            </div>
-            <div id="face-ui" style="display:none;">
-                <h2 style="margin-bottom: 20px;">Face ID Scan</h2>
-                <div class="cam-box" style="display:block;">
-                    <div class="scan-line"></div>
-                    <video id="vid" autoplay playsinline></video>
+    <!-- Palace Security Gate -->
+    <div class="security-gate" id="securityGate">
+        <div class="gate-content">
+            <img src="https://i.pinimg.com/originals/9e/7c/ae/9e7cae834618e4785461160358482df7.gif" alt="Palace" class="gate-image">
+            <h1 class="gate-title">🏰 The Eternal Palace</h1>
+            <p class="gate-subtitle">Welcome, Beautiful Soul</p>
+            
+            <div class="security-form">
+                <div class="form-group">
+                    <label class="form-label">🔒 Question 1: Chno smiya li msmiha 3lk?</label>
+                    <input type="text" id="securityAnswer" class="form-input" placeholder="Jawab hna...">
                 </div>
-                <p style="margin-bottom: 20px; font-weight:bold; color: var(--primary-pink);">Scanning for Ilham's face... 🎀</p>
-                <button class="btn-style" onclick="initCam()">Start Scanner 👑</button>
+                <button class="verify-btn" onclick="verifyAnswer()">
+                    Verify 🎀
+                </button>
+                <p class="error-msg" id="errorMsg"></p>
             </div>
         </div>
     </div>
 
-    <div id="palace">
-        
-        <div class="card" style="text-align: center;">
-            <img src="https://i.pinimg.com/originals/47/4d/9c/474d9c02685973713066371465228189.gif" style="width: 140px; border-radius: 50%; border: 4px dashed var(--soft-pink); padding: 5px; margin-bottom: 15px;">
-            <h1>Welcome Home, Ilham!</h1>
-            <p>Every corner of this palace belongs to you. 🌸</p>
-        </div>
+    <!-- Main Palace Content -->
+    <div class="palace-container" id="palaceContent">
+        <!-- Navigation -->
+        <nav class="palace-nav">
+            <div class="nav-logo">👑 Ilham & Noamane</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#timeline">Our Journey</a></li>
+                <li><a href="#love-notes">Love Notes</a></li>
+                <li><a href="#games">Games</a></li>
+                <li><a href="#bucket-list">Dreams</a></li>
+            </ul>
+        </nav>
 
-        <div class="card">
-            <h2>🕒 Timeless Connection</h2>
-            <div class="timer-grid" style="margin-top: 20px;">
-                <div class="t-box"><b><span id="d">0</span></b><span>Days</span></div>
-                <div class="t-box"><b><span id="h">0</span></b><span>Hrs</span></div>
-                <div class="t-box"><b><span id="m">0</span></b><span>Min</span></div>
-                <div class="t-box"><b><span id="s">0</span></b><span>Sec</span></div>
-            </div>
-            <p style="text-align: center; margin-top: 20px; font-weight: 800; color: var(--primary-pink); font-size: 20px;">Since: Jan 25, 2025 💖</p>
-        </div>
-
-        <div class="card">
-            <h2>🤖 Ask Noamane's Heart</h2>
-            <p style="text-align: center; font-weight: bold; margin-bottom: 15px;">Swlini ay 7aja a Ilham, o ghayjawbk l9lb dyali 💖</p>
-            <div id="chat-box" class="chat-container">
-                <div class="msg-ai">Hbibti Ilham, swlini ay 7aja! 🎀 (Ex: chhal katbghini? fo9ach tsahbna? ...)</div>
-            </div>
-            <div style="display: flex; gap: 10px;">
-                <input type="text" id="ai-input" class="in-style" style="margin-bottom: 0; flex: 1;" placeholder="Ktbili hna...">
-                <button class="btn-style" style="width: auto; padding: 15px 25px;" onclick="askAI()">Send</button>
-            </div>
-        </div>
-
-        <div class="card" style="text-align: center;">
-            <h2>🎮 The Love Quest</h2>
-            <p style="font-weight: bold; margin-top:10px;">Catch 10 hearts! ❤️</p>
-            <div class="score-board">Score: <span id="score">0</span> 🎀</div>
-            <div id="game-area">
-                <div id="target-heart" class="moving-heart" onclick="catchHeart(event)">❤️</div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>💌 The Secret Letter</h2>
-            <div style="font-family: 'Playfair Display'; line-height: 2.2; margin-top: 20px; padding: 30px; border: 3px dashed var(--soft-pink); background: #fffdfa; border-radius: 20px; font-size: 19px;">
-                My treasure Ilham, <br><br>
-                I hope had letter tkon radyak 7int ila 39lt nhar 24 decembre 2025 knti glti lya (mkrahtch idiro liya f3id miladi ghir chi letter ) o ana ofc man9dch ndir rasi masm3tch wla mandirch chi haja nti gaylaha ya3ni baghaha . <br><br>
-                Btw happy birthday Just want you to know that you mean so much to me. You make my life better, my days brighter, and my heart calmer. I’m really grateful to have you in my life. <br><br>
-                I’m writing this letter to tell u how much i love u and how grateful I am to have you in my life . You make my days brighter, my heart calmer, and everything feels better when you’re around With you, even the simplest moments become special I just want you to know that I care about you more than words can say and I hope I can keep making you smile, today and always. <br><br>
-                Forever yours, <br>
-                <b style="color: var(--primary-pink); font-size: 24px;">Noamane 🎀</b>
-            </div>
-            <center><button id="hug-btn" onclick="sendHug()">Send Noamane a Hug 🫂</button></center>
-        </div>
-
-        <div class="card">
-            <h2>✉️ Open When...</h2>
-            <br>
-            <div class="env-btn" onclick="tog('o1')">You're Happy 🎀</div>
-            <div id="o1" class="env-box">That's what I love to see! Keep that smile on your face, it's my favorite power source. 🌟</div>
-            
-            <div class="env-btn" onclick="tog('o2')">Angry at me 🎀</div>
-            <div id="o2" class="env-box">I'm sorry, my queen. I know I can be a headache sometimes, but I never mean to hurt you. Let's fix it? 🫂</div>
-            
-            <div class="env-btn" onclick="tog('o3')">Feel Sad 🎀</div>
-            <div id="o3" class="env-box">I wish I could hold you tight right now. You are so strong, but it's okay to let it out. I'm always here. ❤️</div>
-            
-            <div class="env-btn" onclick="tog('o4')">Bored 🎀</div>
-            <div id="o4" class="env-box">Call me! Or look through our photos. I'll always find a way to make you laugh. 🎮</div>
-        </div>
-
-        <div class="card">
-            <h2>💖 Why I Love You</h2>
-            <div id="reasons-wall" style="margin-top: 20px; height: 500px; overflow-y: auto; padding-right: 15px;">
+        <!-- Hero Section -->
+        <section id="home" class="hero-section">
+            <div class="hero-content">
+                <div class="crown-icon">👑</div>
+                <h1 class="hero-title">
+                    <span class="title-line">Welcome Home,</span>
+                    <span class="title-name">Ilham</span>
+                </h1>
+                <p class="hero-subtitle">Every corner of this palace belongs to you 🌸</p>
+                <div class="scroll-indicator">
+                    <span>Explore Our Kingdom</span>
+                    <i class="fas fa-chevron-down"></i>
                 </div>
-        </div>
+            </div>
+        </section>
 
-        <div class="card">
-            <h2>🚀 Our Future Plans</h2>
-            <ul style="list-style: none; margin-top: 20px;">
-                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border-left: 5px solid var(--primary-pink); box-shadow: 0 2px 10px rgba(0,0,0,0.05);">📍 Traveling to every place you ever dreamed of.</li>
-                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border-left: 5px solid var(--primary-pink); box-shadow: 0 2px 10px rgba(0,0,0,0.05);">🏡 Creating our own cozy world full of peace.</li>
-                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border-left: 5px solid var(--primary-pink); box-shadow: 0 2px 10px rgba(0,0,0,0.05);">☕ Unlimited coffee dates and deep talks.</li>
-                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border-left: 5px solid var(--primary-pink); box-shadow: 0 2px 10px rgba(0,0,0,0.05);">💍 Growing old together and staying "us".</li>
-            </ul>
-        </div>
+        <!-- Timeless Connection Counter -->
+        <section class="counter-section">
+            <h2 class="section-title">⏳ Timeless Connection</h2>
+            <div class="counter-container">
+                <div class="counter-item">
+                    <span class="counter-number" id="days">0</span>
+                    <span class="counter-label">Days</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number" id="hours">0</span>
+                    <span class="counter-label">Hours</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number" id="minutes">0</span>
+                    <span class="counter-label">Minutes</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number" id="seconds">0</span>
+                    <span class="counter-label">Seconds</span>
+                </div>
+            </div>
+            <p class="counter-since">Since: Jan 25, 2025 💖</p>
+        </section>
 
-        <div class="card">
-            <h2>📜 The Palace Rules</h2>
-            <ul style="list-style: none; margin-top: 20px;">
-                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border: 2px dashed #ffcce0;">🎀 1. Never sleep while we are both sad or angry.</li>
-                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border: 2px dashed #ffcce0;">🎀 2. Honesty is the only language we speak.</li>
-                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border: 2px dashed #ffcce0;">🎀 3. No matter what, we support each other's dreams.</li>
-                <li style="margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 15px; border: 2px dashed #ffcce0;">🎀 4. Always remember that you are my priority.</li>
-            </ul>
-        </div>
+        <!-- Photo Gallery -->
+        <section id="gallery" class="gallery-section">
+            <h2 class="section-title">📸 Our Memories</h2>
+            <p class="section-subtitle">Every picture tells our story</p>
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-heart"></i>
+                        <span>Our First Photo</span>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-star"></i>
+                        <span>Special Moment</span>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-kiss-wink-heart"></i>
+                        <span>Together Forever</span>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-crown"></i>
+                        <span>My Queen & Me</span>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-camera"></i>
+                        <span>Adventures</span>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-gem"></i>
+                        <span>Precious Times</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <div class="card">
-            <h2>🎵 Our Soundtrack</h2>
-            <br>
-            <a href="https://youtu.be/N0oyRZiVyZc" target="_blank" class="song"><div class="disc">💿</div><div><b>Cinnamon Girl</b><p>Lana Del Rey</p></div></a>
-            <a href="https://youtu.be/FNdC1AJnzQE" target="_blank" class="song"><div class="disc">💿</div><div><b>Cinnamon Girl x J Freak</b><p>The Remix</p></div></a>
-            <a href="https://youtu.be/SOJpE1KMUbo" target="_blank" class="song"><div class="disc">💿</div><div><b>Raindance</b><p>The Vibe</p></div></a>
-            <a href="https://youtu.be/FNdC1AJnzQE" target="_blank" class="song"><div class="disc">💿</div><div><b>Love Me Not</b><p>Our Rhythm</p></div></a>
-        </div>
+        <!-- Love Quotes Section -->
+        <section class="quotes-section">
+            <h2 class="section-title">💕 Love Quotes</h2>
+            <div class="quotes-slider">
+                <div class="quote-card active" id="quoteCard">
+                    <p class="quote-text" id="quoteText">"In you, I've found the love of my life and my closest, truest friend."</p>
+                    <span class="quote-author">- Noamane for Ilham 💝</span>
+                </div>
+                <div class="quote-nav">
+                    <button class="quote-btn" onclick="prevQuote()"><i class="fas fa-chevron-left"></i></button>
+                    <button class="quote-btn" onclick="nextQuote()"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
 
+        <!-- Memory Timeline -->
+        <section id="timeline" class="timeline-section">
+            <h2 class="section-title">🛤️ Our Journey Together</h2>
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Jan 25, 2025</div>
+                        <h3>💕 The Beginning</h3>
+                        <p>When our love story officially began. The day that changed everything.</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-date">First Month</div>
+                        <h3>🌟 Getting Closer</h3>
+                        <p>Every conversation, every moment together made us fall deeper.</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Special Days</div>
+                        <h3>🎂 Celebrations</h3>
+                        <p>Birthday surprises, special dates, and unforgettable memories.</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Today</div>
+                        <h3>👑 Growing Together</h3>
+                        <p>Still writing our story, one beautiful chapter at a time.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Heart Game -->
+        <section id="games" class="game-section">
+            <h2 class="section-title">🎮 The Love Quest</h2>
+            <p class="section-subtitle">Catch 10 hearts! ❤️</p>
+            <div class="game-container">
+                <div class="game-score">Score: <span id="gameScore">0</span> 🎀</div>
+                <div class="game-area" id="gameArea">
+                    <button class="heart-btn" id="heartBtn" onclick="catchHeart()">❤️</button>
+                </div>
+                <button class="game-reset" onclick="resetGame()">Reset Game</button>
+            </div>
+        </section>
+
+        <!-- Love Calculator -->
+        <section class="calculator-section">
+            <h2 class="section-title">💗 Love Calculator</h2>
+            <div class="calculator-container">
+                <div class="love-meter">
+                    <div class="meter-fill" id="loveMeter"></div>
+                </div>
+                <div class="love-percentage" id="lovePercentage">100%</div>
+                <p class="love-message" id="loveMessage">Perfect match made in heaven! 💕</p>
+                <button class="calc-btn" onclick="calculateLove()">Calculate Again 💝</button>
+            </div>
+        </section>
+
+        <!-- Ask Noamane's Heart - AI Powered -->
+        <section class="ask-section">
+            <h2 class="section-title">🤖 Ask Noamane's Heart</h2>
+            <p class="section-subtitle">Swlini ay 7aja a Ilham, o ghayjawbk l9lb dyali 💖</p>
+            <div class="ask-container">
+                <div class="chat-box" id="chatBox">
+                    <div class="chat-message bot">
+                        <span>Hbibti Ilham, swlini ay 7aja! 🎀 (Ex: chhal katbghini? fo9ach tsahbna? ...)</span>
+                    </div>
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" id="userQuestion" class="chat-input" placeholder="Swli hna..." onkeypress="if(event.key==='Enter')askNoamane()">
+                    <button class="send-btn" onclick="askNoamane()">Send 💕</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Love Confession Booth -->
+        <section class="confession-section">
+            <h2 class="section-title">💌 Love Confession Booth</h2>
+            <p class="section-subtitle">Gouli liya chno bghiti, ana m3ak! 💕</p>
+            <div class="confession-container">
+                <div class="confession-card">
+                    <textarea id="confessionText" class="confession-input" placeholder="Kteb hna chno bagha t9oli... 💕"></textarea>
+                    <button class="confession-btn" onclick="sendConfession()">Send to Noamane's Heart 💌</button>
+                </div>
+                <div id="confessionResponse" class="confession-response" style="display: none;"></div>
+            </div>
+        </section>
+
+        <!-- Mood Tracker -->
+        <section class="mood-section">
+            <h2 class="section-title">🌈 How Are You Feeling Today?</h2>
+            <p class="section-subtitle">Gouli kifach 7assiti daba 💕</p>
+            <div class="mood-container">
+                <div class="mood-options">
+                    <button class="mood-btn" onclick="selectMood('happy')" data-mood="happy">
+                        <span class="mood-emoji">😊</span>
+                        <span class="mood-label">Happy</span>
+                    </button>
+                    <button class="mood-btn" onclick="selectMood('loved')" data-mood="loved">
+                        <span class="mood-emoji">🥰</span>
+                        <span class="mood-label">Loved</span>
+                    </button>
+                    <button class="mood-btn" onclick="selectMood('sad')" data-mood="sad">
+                        <span class="mood-emoji">😢</span>
+                        <span class="mood-label">Sad</span>
+                    </button>
+                    <button class="mood-btn" onclick="selectMood('angry')" data-mood="angry">
+                        <span class="mood-emoji">😤</span>
+                        <span class="mood-label">Angry</span>
+                    </button>
+                    <button class="mood-btn" onclick="selectMood('sleepy')" data-mood="sleepy">
+                        <span class="mood-emoji">😴</span>
+                        <span class="mood-label">Sleepy</span>
+                    </button>
+                    <button class="mood-btn" onclick="selectMood('excited')" data-mood="excited">
+                        <span class="mood-emoji">🤩</span>
+                        <span class="mood-label">Excited</span>
+                    </button>
+                </div>
+                <div id="moodResponse" class="mood-response"></div>
+            </div>
+        </section>
+
+        <!-- Love Language Quiz -->
+        <section class="quiz-section">
+            <h2 class="section-title">💘 Discover Your Love Language</h2>
+            <p class="section-subtitle">Let's find out how you receive love best! 💕</p>
+            <div class="quiz-container" id="quizContainer">
+                <div class="quiz-start" id="quizStart">
+                    <button class="quiz-start-btn" onclick="startQuiz()">Start Quiz 🎯</button>
+                </div>
+                <div class="quiz-question" id="quizQuestion" style="display: none;">
+                    <p class="quiz-question-text" id="quizQuestionText"></p>
+                    <div class="quiz-options" id="quizOptions"></div>
+                    <div class="quiz-progress">
+                        <span id="quizProgress">1/5</span>
+                    </div>
+                </div>
+                <div class="quiz-result" id="quizResult" style="display: none;">
+                    <div class="result-icon" id="resultIcon">💕</div>
+                    <h3 id="resultTitle">Your Love Language!</h3>
+                    <p id="resultDescription"></p>
+                    <button class="quiz-restart-btn" onclick="restartQuiz()">Take Again 🔄</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Daily Love Message -->
+        <section class="daily-message-section">
+            <h2 class="section-title">📜 Message of the Day</h2>
+            <p class="section-subtitle">A special message just for you, every day! 💕</p>
+            <div class="daily-message-container">
+                <div class="daily-message-card" id="dailyMessageCard">
+                    <div class="message-scroll">📜</div>
+                    <p class="daily-message-text" id="dailyMessageText">Loading your special message...</p>
+                    <span class="daily-message-date" id="dailyMessageDate"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Virtual Gift Shop -->
+        <section class="gift-shop-section">
+            <h2 class="section-title">🎁 Virtual Gift Shop</h2>
+            <p class="section-subtitle">Send a virtual gift! 💕</p>
+            <div class="gift-shop-container">
+                <div class="gift-grid">
+                    <div class="gift-item" onclick="sendGift('🌹')">
+                        <span class="gift-icon">🌹</span>
+                        <span class="gift-name">Rose</span>
+                    </div>
+                    <div class="gift-item" onclick="sendGift('🍫')">
+                        <span class="gift-icon">🍫</span>
+                        <span class="gift-name">Chocolate</span>
+                    </div>
+                    <div class="gift-item" onclick="sendGift('💐')">
+                        <span class="gift-icon">💐</span>
+                        <span class="gift-name">Bouquet</span>
+                    </div>
+                    <div class="gift-item" onclick="sendGift('💍')">
+                        <span class="gift-icon">💍</span>
+                        <span class="gift-name">Ring</span>
+                    </div>
+                    <div class="gift-item" onclick="sendGift('🧸')">
+                        <span class="gift-icon">🧸</span>
+                        <span class="gift-name">Teddy Bear</span>
+                    </div>
+                    <div class="gift-item" onclick="sendGift('🍰')">
+                        <span class="gift-icon">🍰</span>
+                        <span class="gift-name">Cake</span>
+                    </div>
+                    <div class="gift-item" onclick="sendGift('☕')">
+                        <span class="gift-icon">☕</span>
+                        <span class="gift-name">Coffee</span>
+                    </div>
+                    <div class="gift-item" onclick="sendGift('🌙')">
+                        <span class="gift-icon">🌙</span>
+                        <span class="gift-name">Moon</span>
+                    </div>
+                </div>
+                <div id="giftSentPopup" class="gift-sent-popup" style="display: none;">
+                    <span class="gift-sent-icon"></span>
+                    <p class="gift-sent-message"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Relationship Stats -->
+        <section class="stats-section">
+            <h2 class="section-title">📊 Our Love Stats</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon">💕</div>
+                    <div class="stat-number" id="totalDays">0</div>
+                    <div class="stat-label">Days of Love</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💬</div>
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Love Messages</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🤗</div>
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Virtual Hugs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">❤️</div>
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Love Level</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Couple Questions Game -->
+        <section class="questions-game-section">
+            <h2 class="section-title">❓ Couple Questions Game</h2>
+            <p class="section-subtitle">Answer and learn more about each other! 💕</p>
+            <div class="questions-game-container">
+                <div class="question-display" id="questionDisplay">
+                    <p class="game-question" id="gameQuestion">Click the button to get a question!</p>
+                </div>
+                <div class="game-controls">
+                    <button class="new-question-btn" onclick="getNewQuestion()">New Question 🎲</button>
+                    <button class="reveal-answer-btn" onclick="revealAnswer()">Reveal Answer 💡</button>
+                </div>
+                <div class="answer-display" id="answerDisplay" style="display: none;">
+                    <p id="answerText"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Memory Match Game -->
+        <section class="memory-game-section">
+            <h2 class="section-title">🧩 Memory Match Game</h2>
+            <p class="section-subtitle">Match the love symbols! 💕</p>
+            <div class="memory-game-container">
+                <div class="memory-score">Moves: <span id="memoryMoves">0</span> | Matches: <span id="memoryMatches">0</span>/8</div>
+                <div class="memory-grid" id="memoryGrid"></div>
+                <button class="memory-restart-btn" onclick="initMemoryGame()">New Game 🔄</button>
+            </div>
+        </section>
+
+        <!-- Love Story Generator -->
+        <section class="story-generator-section">
+            <h2 class="section-title">📖 Our Love Story Generator</h2>
+            <p class="section-subtitle">Generate a unique love story featuring us! 💕</p>
+            <div class="story-generator-container">
+                <button class="generate-story-btn" onclick="generateLoveStory()">Generate Our Story ✨</button>
+                <div class="story-output" id="storyOutput" style="display: none;">
+                    <div class="story-text" id="storyText"></div>
+                    <button class="copy-story-btn" onclick="copyStory()">Copy Story 📋</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Good Morning/Night Messages -->
+        <section class="wishes-section">
+            <h2 class="section-title">🌅 Special Wishes</h2>
+            <p class="section-subtitle">Beautiful wishes for every moment 💕</p>
+            <div class="wishes-container">
+                <div class="wish-card morning">
+                    <div class="wish-icon">☀️</div>
+                    <h3>Good Morning!</h3>
+                    <button class="wish-btn" onclick="getMorningWish()">Get Morning Wish 🌅</button>
+                    <p class="wish-message" id="morningWish"></p>
+                </div>
+                <div class="wish-card night">
+                    <div class="wish-icon">🌙</div>
+                    <h3>Good Night!</h3>
+                    <button class="wish-btn" onclick="getNightWish()">Get Night Wish ✨</button>
+                    <p class="wish-message" id="nightWish"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Countdown Timer -->
+        <section class="countdown-section">
+            <h2 class="section-title">⏰ Countdown to Special Days</h2>
+            <div class="countdown-container">
+                <div class="countdown-card">
+                    <div class="countdown-icon">🎂</div>
+                    <h3>Ilham's Birthday</h3>
+                    <div class="countdown-timer" id="birthdayCountdown"></div>
+                </div>
+                <div class="countdown-card">
+                    <div class="countdown-icon">💕</div>
+                    <h3>Valentine's Day</h3>
+                    <div class="countdown-timer" id="valentineCountdown"></div>
+                </div>
+                <div class="countdown-card">
+                    <div class="countdown-icon">💍</div>
+                    <h3>Our Anniversary</h3>
+                    <div class="countdown-timer" id="anniversaryCountdown"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Love Potion Mixer -->
+        <section class="potion-section">
+            <h2 class="section-title">⚗️ Love Potion Mixer</h2>
+            <p class="section-subtitle">Mix ingredients to create your perfect love potion! 💕</p>
+            <div class="potion-container">
+                <div class="potion-ingredients">
+                    <button class="ingredient-btn" onclick="addIngredient('❤️')">❤️ Love</button>
+                    <button class="ingredient-btn" onclick="addIngredient('✨')">✨ Magic</button>
+                    <button class="ingredient-btn" onclick="addIngredient('🌸')">🌸 Sweetness</button>
+                    <button class="ingredient-btn" onclick="addIngredient('🔥')">🔥 Passion</button>
+                    <button class="ingredient-btn" onclick="addIngredient('💎')">💎 Trust</button>
+                    <button class="ingredient-btn" onclick="addIngredient('🦋')">🦋 Joy</button>
+                </div>
+                <div class="potion-cauldron">
+                    <div class="cauldron">🧪</div>
+                    <div class="potion-mix" id="potionMix"></div>
+                </div>
+                <div class="potion-controls">
+                    <button class="brew-btn" onclick="brewPotion()">Brew Potion ✨</button>
+                    <button class="clear-btn" onclick="clearPotion()">Clear 🗑️</button>
+                </div>
+                <div class="potion-result" id="potionResult" style="display: none;"></div>
+            </div>
+        </section>
+
+        <!-- Secret Letter -->
+        <section class="letter-section">
+            <h2 class="section-title">📨 The Secret Letter</h2>
+            <div class="letter-container">
+                <div class="letter-envelope" id="letterEnvelope" onclick="openLetter()">
+                    <div class="envelope-flap"></div>
+                    <div class="envelope-body">
+                        <span>Click to Open 📨</span>
+                    </div>
+                </div>
+                <div class="letter-content" id="letterContent">
+                    <p class="letter-greeting">My treasure Ilham,</p>
+                    <p class="letter-text">I hope had letter tkon radyak 7int ila 39lt nhar 24 decembre 2025 knti glti lya (mkrahtch idiro liya f3id miladi ghir chi letter ) o ana ofc man9dch ndir rasi masm3tch wla mandirch chi haja nti gaylaha ya3ni baghaha.</p>
+                    <p class="letter-text">Btw happy birthday Just want you to know that you mean so much to me. You make my life better, my days brighter, and my heart calmer. I'm really grateful to have you in my life.</p>
+                    <p class="letter-text">I'm writing this letter to tell u how much i love u and how grateful I am to have you in my life. You make my days brighter, my heart calmer, and everything feels better when you're around. With you, even the simplest moments become special. I just want you to know that I care about you more than words can say and I hope I can keep making you smile, today and always.</p>
+                    <p class="letter-signature">Forever yours,<br><strong>Noamane 🎀</strong></p>
+                    <button class="hug-btn" onclick="sendHug()">Send Noamane a Hug 🫂</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Open When Letters -->
+        <section class="open-when-section">
+            <h2 class="section-title">✉️ Open When...</h2>
+            <div class="letters-grid">
+                <div class="when-card" onclick="openWhen('happy')">
+                    <div class="when-icon">😊</div>
+                    <h3>You're Happy 🎀</h3>
+                    <p class="when-preview">That's what I love to see...</p>
+                    <div class="when-content">
+                        <p>That's what I love to see! Keep that smile on your face, it's my favorite power source. 🌟</p>
+                    </div>
+                </div>
+                <div class="when-card" onclick="openWhen('angry')">
+                    <div class="when-icon">😤</div>
+                    <h3>Angry at me 🎀</h3>
+                    <p class="when-preview">I'm sorry, my queen...</p>
+                    <div class="when-content">
+                        <p>I'm sorry, my queen. I know I can be a headache sometimes, but I never mean to hurt you. Let's fix it? 🫂</p>
+                    </div>
+                </div>
+                <div class="when-card" onclick="openWhen('sad')">
+                    <div class="when-icon">😢</div>
+                    <h3>Feel Sad 🎀</h3>
+                    <p class="when-preview">I wish I could hold you...</p>
+                    <div class="when-content">
+                        <p>I wish I could hold you tight right now. You are so strong, but it's okay to let it out. I'm always here. ❤️</p>
+                    </div>
+                </div>
+                <div class="when-card" onclick="openWhen('bored')">
+                    <div class="when-icon">😴</div>
+                    <h3>Bored 🎀</h3>
+                    <p class="when-preview">Call me!</p>
+                    <div class="when-content">
+                        <p>Call me! Or look through our photos. I'll always find a way to make you laugh. 🎮</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why I Love You -->
+        <section class="why-love-section">
+            <h2 class="section-title">💖 Why I Love You</h2>
+            <div class="reasons-grid">
+                <div class="reason-card">
+                    <div class="reason-icon">✨</div>
+                    <h3>Your Beautiful Soul</h3>
+                    <p>Inside and out, you're the most beautiful person I've ever known.</p>
+                </div>
+                <div class="reason-card">
+                    <div class="reason-icon">🤗</div>
+                    <h3>Your Warmth</h3>
+                    <p>The way you care about everything and everyone is inspiring.</p>
+                </div>
+                <div class="reason-card">
+                    <div class="reason-icon">😂</div>
+                    <h3>Your Laugh</h3>
+                    <p>It's the best sound in the world. I'd do anything to hear it.</p>
+                </div>
+                <div class="reason-card">
+                    <div class="reason-icon">💪</div>
+                    <h3>Your Strength</h3>
+                    <p>You face challenges with grace and never give up.</p>
+                </div>
+                <div class="reason-card">
+                    <div class="reason-icon">🧠</div>
+                    <h3>Your Intelligence</h3>
+                    <p>Smart, thoughtful, and always teaching me new things.</p>
+                </div>
+                <div class="reason-card">
+                    <div class="reason-icon">💕</div>
+                    <h3>Everything</h3>
+                    <p>Every little thing about you makes me fall deeper in love.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Love Notes Section -->
+        <section id="love-notes" class="notes-section">
+            <h2 class="section-title">📝 Love Notes</h2>
+            <p class="section-subtitle">Leave a note for each other</p>
+            <div class="notes-container">
+                <div class="notes-display" id="notesDisplay">
+                    <!-- Notes will be added here -->
+                </div>
+                <div class="note-form">
+                    <textarea id="noteText" class="note-input" placeholder="Write your love note here... 💕"></textarea>
+                    <button class="note-btn" onclick="addNote()">Add Note 📨</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bucket List -->
+        <section id="bucket-list" class="bucket-section">
+            <h2 class="section-title">🌟 Our Dreams Together</h2>
+            <div class="bucket-container">
+                <div class="bucket-item">
+                    <div class="bucket-icon">📍</div>
+                    <h3>Travel the World</h3>
+                    <p>Visiting every place you ever dreamed of together.</p>
+                    <span class="bucket-status">In Progress 🚀</span>
+                </div>
+                <div class="bucket-item">
+                    <div class="bucket-icon">🏠</div>
+                    <h3>Our Cozy Home</h3>
+                    <p>Creating our own cozy world full of peace and love.</p>
+                    <span class="bucket-status">Dreaming 💭</span>
+                </div>
+                <div class="bucket-item">
+                    <div class="bucket-icon">☕</div>
+                    <h3>Coffee Dates Forever</h3>
+                    <p>Unlimited coffee dates and deep talks about everything.</p>
+                    <span class="bucket-status">Always ☕</span>
+                </div>
+                <div class="bucket-item">
+                    <div class="bucket-icon">💍</div>
+                    <h3>Forever Together</h3>
+                    <p>Growing old together and staying "us" forever.</p>
+                    <span class="bucket-status">Promised 💕</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Future Plans -->
+        <section class="future-section">
+            <h2 class="section-title">🚀 Our Future Plans</h2>
+            <div class="future-list">
+                <div class="future-item">
+                    <span class="future-icon">📍</span>
+                    <p>Traveling to every place you ever dreamed of.</p>
+                </div>
+                <div class="future-item">
+                    <span class="future-icon">🏡</span>
+                    <p>Creating our own cozy world full of peace.</p>
+                </div>
+                <div class="future-item">
+                    <span class="future-icon">☕</span>
+                    <p>Unlimited coffee dates and deep talks.</p>
+                </div>
+                <div class="future-item">
+                    <span class="future-icon">💍</span>
+                    <p>Growing old together and staying "us".</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Palace Rules -->
+        <section class="rules-section">
+            <h2 class="section-title">📜 The Palace Rules</h2>
+            <div class="rules-container">
+                <div class="rule-item">
+                    <span class="rule-number">1</span>
+                    <p>Never sleep while we are both sad or angry. 🎀</p>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-number">2</span>
+                    <p>Honesty is the only language we speak. 🎀</p>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-number">3</span>
+                    <p>No matter what, we support each other's dreams. 🎀</p>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-number">4</span>
+                    <p>Always remember that you are my priority. 🎀</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Soundtrack -->
+        <section class="music-section">
+            <h2 class="section-title">🎵 Our Soundtrack</h2>
+            <div class="music-grid">
+                <a href="https://youtu.be/N0oyRZiVyZc" target="_blank" class="song-card">
+                    <div class="song-icon">💿</div>
+                    <h3>Cinnamon Girl</h3>
+                    <p>Lana Del Rey</p>
+                </a>
+                <a href="https://youtu.be/FNdC1AJnzQE" target="_blank" class="song-card">
+                    <div class="song-icon">💿</div>
+                    <h3>Cinnamon Girl x J Freak</h3>
+                    <p>The Remix</p>
+                </a>
+                <a href="https://youtu.be/SOJpE1KMUbo" target="_blank" class="song-card">
+                    <div class="song-icon">💿</div>
+                    <h3>Raindance</h3>
+                    <p>The Vibe</p>
+                </a>
+                <a href="https://youtu.be/FNdC1AJnzQE" target="_blank" class="song-card">
+                    <div class="song-icon">💿</div>
+                    <h3>Love Me Not</h3>
+                    <p>Our Rhythm</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Special Dates Calendar -->
+        <section class="calendar-section">
+            <h2 class="section-title">📅 Special Dates</h2>
+            <div class="calendar-container">
+                <div class="date-card">
+                    <div class="date-icon">💕</div>
+                    <div class="date-info">
+                        <h3>January 25</h3>
+                        <p>The Day We Became "Us"</p>
+                    </div>
+                </div>
+                <div class="date-card">
+                    <div class="date-icon">🎂</div>
+                    <div class="date-info">
+                        <h3>December 24</h3>
+                        <p>Ilham's Birthday 🎀</p>
+                    </div>
+                </div>
+                <div class="date-card">
+                    <div class="date-icon">💝</div>
+                    <div class="date-info">
+                        <h3>February 14</h3>
+                        <p>Valentine's Day</p>
+                    </div>
+                </div>
+                <div class="date-card">
+                    <div class="date-icon">🌸</div>
+                    <div class="date-info">
+                        <h3>Every Day</h3>
+                        <p>Our Love Anniversary</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="palace-footer">
+            <div class="footer-content">
+                <div class="footer-hearts">💕💕💕</div>
+                <h3>Made with 💖 for Ilham</h3>
+                <p class="footer-text">My Queen, my love, my everything</p>
+                <p class="footer-copyright">© 2025 The Eternal Palace | Ilham & Noamane 👑</p>
+            </div>
+        </footer>
     </div>
 
-    <script>
-        // Hello Kitty Magic Falling Effect Logic
-        function createFallingMagic() {
-            const items = ['🌸', '🌺', '🎀', '💖', '💮', '✨'];
-            const magicBox = document.getElementById('magic-bg');
-            const item = document.createElement('div');
-            item.innerText = items[Math.floor(Math.random() * items.length)];
-            item.classList.add('falling-item');
-            item.style.left = Math.random() * 100 + 'vw';
-            item.style.animationDuration = Math.random() * 4 + 5 + 's'; // 5 to 9 seconds fall
-            item.style.fontSize = Math.random() * 15 + 15 + 'px'; // 15px to 30px size
-            document.body.appendChild(item);
-            setTimeout(() => { item.remove(); }, 9000);
-        }
-        setInterval(createFallingMagic, 500); // New item every 0.5s
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <div class="lightbox-content" id="lightboxContent"></div>
+    </div>
 
-        let step = 1;
-        
-        // UNIQUE REASONS ARRAY (Exactly 100 with no duplicates)
-        const reasons = [
-            "Because you make me smile without trying", "Because your presence calms my heart", "Because you understand me like no one else",
-            "Because you listen to me with all your heart", "Because you’re incredibly kind", "Because you’re 100% real with me",
-            "7int 3ndk sbr m3aya 7ta fnharati lkhyba", "Because you support me fkolchi (hadi kngolha lk dima)", "Because you believe in my dreams",
-            "Because you make my bad days fade away", "Because your smile is my favorite view in the world", "Bcs d7ktk ktrd rouuuu7 makes everything light",
-            "Because u’re beautiful inside and out (hadi my7ydhach lk tbib abniti)", "Because you’re always honest with your intentions", "Because you care in a way that amazes me",
-            "Bcs ktkhlini n7s brasi safe m3k", "Because you respect me deeply", "Because you accept me exactly as I am",
-            "7int ktmotivini fay haja knbghi ndirha", "Because life feels much easier with you by my side", "Because you make the simplest moments feel extraordinary",
-            "Because you are my ultimate peace", "Because you’re the definition of my happiness", "Because you’re my cozy comfort zone",
-            "Wa 7int kt7ssini bl2ihtimam o l7nan", "Because you inspire me to be a better man", "Because whenever I need you, you’re always there",
-            "Because you’re thoughtful in the smallest details", "Because you’re so sweet", "O 7int nti hiya my absolute favorite person",
-            "O ktkhlini n7s brasi m7boob o mkhtar", "Because you trust me with your heart", "Because you’re such a strong woman",
-            "Also 7int nti 7nina o drafat 3lia", "Because you brought so much light into my dark days", "O ktkhlini nd7k wakha mankonch baghi eeeeeh ya bniti eeh",
-            "Because you’re unique wmakynch b7alk", "Because you’re simply YOU", "Because you understand even my silence",
-            "Because you never judge my mistakes", "Because you make my heart feel so full and heavy with love", "Ktkhlini nbghi nwli 7sn 3la 9blk",
-            "Because you give meaning to my days (ta3m ta3m hhh)", "Because you make loving someone feel so easy", "Because you’re my safe heaven",
-            "Because you truly care about my feelings", "Because you’re always honest with me dimn dimn dimn", "Because you’re my effortless joy",
-            "Because you make me feel like the luckiest guy alive", "Because you’re my very favorite thought every morning", "Because you make everything look brighter",
-            "Dimn fi bali o fkhayali", "Because you make me feel understood (wakha makn3rfx nchr7)", "Because you make me feel highly valued",
-            "Because your voice brings peace to my soul", "Because you make my heart literally smile", "Because you hold a special place no one else can touch",
-            "Because chatting with you is my comfort zone", "Because you are 'my person'", "Because you showed me what real love feels like",
-            "Because you accept my flaws without complaining", "Because you make me feel that I am enough", "Because you stand by me through thick and thin",
-            "Kn7s m3k b7l dar bcs nti my home", "Because you’re my favorite hello (jdida 3lk hadi abnti hhhhhhhhhhh)", "Because you’re my hardest goodbye (amn hadi atfhmi li 9bl)",
-            "O kt5lini n7s brasi lwa7id f3inik", "Because you express your feelings honestly", "Because you make me feel secure about us",
-            "Ktrodi lbal ldok tafasil sghaaar li kayfr7oni", "Because one text from you calms my storm", "Because you make me feel deeply appreciated",
-            "Because you bring unimaginable warmth to my life", "7int dimn nti hiya nti m3aya, bla zwa9", "Because loving you feels so incredibly natural",
-            "Because you give me genuine peace of mind", "Ktkhlini nkon fr7an bla ta sabab gha 7int 3arfk kayna", "Gha bchoftk knbred (mtal nhar 1/1/2026 knt m3sb o khlitini nd7k fach 3yti liya appele vidio)",
-            "Because you’re the best surprise life gave me", "Because you make me feel so alive", "Because you’re the best feeling I’ve ever experienced",
-            "Because without you, I feel incomplete", "Because you hold me up when I'm tired", "Because you made my entire world better",
-            "Because you’re my anchor in this chaotic world", "Because you are the main reason behind my smile", "Because you quiet the noise in my mind",
-            "Because my heart chose you without hesitation", "Because ours is my favorite love story", "Because you make me feel cherished every single day",
-            "Because you are my sanctuary in this world", "Because you make my tough heart softer", "Because talking to you is the best part of every day",
-            "Because you make love feel so beautifully simple", "Because you love me without any conditions", "Because you give me that 'forever' feeling",
-            "Because my heart is entirely safe in your hands", "Because everything about you is magical", "7int nti hiya my looove, ro7i w 3mri",
-            "Because I love you… just because ❤️"
-        ];
+    <!-- Hug Popup -->
+    <div class="hug-popup" id="hugPopup">
+        <div class="hug-content">
+            <span class="hug-emoji">🫂</span>
+            <h3>Hug Sent!</h3>
+            <p>Noamane received your hug! 💕</p>
+        </div>
+    </div>
 
-        // 1. QUIZ LOGIC
-        function handleQuiz() {
-            const val = document.getElementById('q-in').value.trim().toLowerCase();
-            const txt = document.getElementById('q-txt');
-            if (step === 1 && val === "ily") {
-                step = 2; txt.innerText = "Question 2: Smit mama?"; document.getElementById('q-in').value = "";
-            } else if (step === 2 && val === "khadija") {
-                step = 3; txt.innerText = "Question 3: Katbghini?"; document.getElementById('q-in').value = "";
-            } else if (step === 3 && val === "ah") {
-                document.getElementById('quiz-ui').style.display = 'none';
-                document.getElementById('face-ui').style.display = 'block';
-            } else { alert("Try again, My Queen! 🎀💖"); }
-        }
-
-        // 2. FACE ID LOGIC
-        async function initCam() {
-            try {
-                const s = await navigator.mediaDevices.getUserMedia({ video: true });
-                document.getElementById('vid').srcObject = s;
-                setTimeout(() => {
-                    confetti({ particleCount: 150, spread: 80, colors: ['#ff5277', '#ffcce0', '#ffffff'] });
-                    document.getElementById('gate').style.transform = "translateY(-100vh) scale(0.8)";
-                    document.getElementById('palace').style.display = "block";
-                    runTimer(); loadReasons(); moveHeart();
-                    
-                    // هنا فين زدت باش الكاميرا تطفى ملي تسالي
-                    s.getTracks().forEach(track => track.stop());
-                }, 3000);
-            } catch (e) {
-                alert("Camera needed! (Proceeding anyway...) 🎀");
-                document.getElementById('gate').style.transform = "translateY(-100vh) scale(0.8)";
-                document.getElementById('palace').style.display = "block";
-                runTimer(); loadReasons(); moveHeart();
-            }
-        }
-
-        // 3. REASONS LOADER
-        function loadReasons() {
-            const wall = document.getElementById('reasons-wall');
-            // Array is now perfectly unique, no Set needed but keeping it just in case
-            const uniqueReasons = [...new Set(reasons)];
-            
-            uniqueReasons.forEach((r, i) => {
-                wall.innerHTML += `<div class="reason-line"><span>${i+1}.</span> ${r}</div>`;
-            });
-            wall.innerHTML += `<div style="color:#d81b60; font-weight:bold; font-size:18px; margin-top:20px; border: 3px dashed var(--primary-pink); background: #fff; padding: 25px; border-radius: 20px; text-align: center; box-shadow: 0 5px 15px rgba(255,82,119,0.1);">
-                🎀 Anzidk 101 7int bghit o tstahli ktr mn 10000000000000000 Because loving you is not just a feeling, it’s a choice I make every single day... ❤️
-            </div>`;
-        }
-
-        // 4. TIMER
-        function runTimer() {
-            const start = new Date("January 25, 2025 00:00:00").getTime();
-            setInterval(() => {
-                const now = new Date().getTime();
-                const d = now - start;
-                document.getElementById('d').innerText = Math.floor(d / (1000 * 60 * 60 * 24));
-                document.getElementById('h').innerText = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                document.getElementById('m').innerText = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
-                document.getElementById('s').innerText = Math.floor((d % (1000 * 60)) / 1000);
-            }, 1000);
-        }
-
-        function tog(id) {
-            const e = document.getElementById(id);
-            if(e.style.display === 'block') {
-                e.style.display = 'none';
-            } else {
-                e.style.display = 'block';
-                // Cute mini confetti when opening envelope
-                confetti({ particleCount: 30, spread: 40, origin: { y: 0.6 }, colors: ['#ff5277', '#ffcce0'] });
-            }
-        }
-
-        // BONUS LOGIC
-        let score = 0;
-        function moveHeart() {
-            const h = document.getElementById('target-heart');
-            const a = document.getElementById('game-area');
-            h.style.left = Math.random() * (a.clientWidth - 50) + 'px';
-            h.style.top = Math.random() * (a.clientHeight - 50) + 'px';
-        }
-        function catchHeart(e) {
-            e.stopPropagation();
-            score++;
-            document.getElementById('score').innerText = score;
-            confetti({ particleCount: 20, spread: 30, colors: ['#ff0000', '#ffcce0'] });
-            
-            if(score === 10) {
-                alert("You caught 10 hearts! My queen wins! 👑💖");
-                confetti({ particleCount: 200, spread: 100 });
-            }
-            moveHeart();
-        }
-        function sendHug() {
-            alert("Hug Received! ❤️ Noamane is hugging you back 🫂🎀");
-            confetti({ particleCount: 150, spread: 80, origin: { y: 0.8 }, colors: ['#ff5277', '#ffffff'] });
-        }
-
-        // --- NEW AI CHATBOT LOGIC ---
-        function askAI() {
-            const input = document.getElementById('ai-input');
-            const msg = input.value.trim();
-            if (!msg) return;
-            
-            const chatBox = document.getElementById('chat-box');
-            
-            // Add Ilham's message
-            chatBox.innerHTML += `<div class="msg-user">${msg}</div>`;
-            input.value = '';
-            chatBox.scrollTop = chatBox.scrollHeight;
-            
-            // AI Logic (Noamane answering)
-            setTimeout(() => {
-                const lowerMsg = msg.toLowerCase();
-                let reply = "Wakha manfhmch mzian hadchi li glti (AI hhh), lmohim howa anani kanbghik w kantsna nchofk dima fr7ana a hbibti! 💖";
-                
-                if (lowerMsg.includes('bghit') || lowerMsg.includes('love') || lowerMsg.includes('katbghini') || lowerMsg.includes('bghitini')) {
-                    reply = "Kanbghik ktr mn ay 7aja fhad dnya a Ilham! Nti hiya ro7i o lhayat dyali ❤️";
-                } else if (lowerMsg.includes('smit') || lowerMsg.includes('name')) {
-                    reply = "Nti Ilham, my beautiful queen 👑, o ana Noamane, rajlk li kay7ma9 3lik!";
-                } else if (lowerMsg.includes('date') || lowerMsg.includes('fo9ach') || lowerMsg.includes('nhar') || lowerMsg.includes('tsahbna')) {
-                    reply = "Bdit hiyaty m3ak f 25 Jan 2025, o 3mri nnsa 24 Decembre 2025, a7san 3id milad! 🌸";
-                } else if (lowerMsg.includes('sad') || lowerMsg.includes('m9l9') || lowerMsg.includes('bki') || lowerMsg.includes('hzina')) {
-                    reply = "Ana dima m3ak a hbibti, 3mri nkhelik t7ssi blhazn. D7ktk hiya dwaya, ylah d7ki daba! 🫂";
-                } else if (lowerMsg.includes('tw7cht') || lowerMsg.includes('miss')) {
-                    reply = "Ta ana tw7chtk bzaaaaaaf a ro7i, kantsna ghir imta nchofk o n3n9k! 🥰";
-                } else if (lowerMsg.includes('promise') || lowerMsg.includes('wa3d')) {
-                    reply = "Kanw3dk nb9a m3ak dima, f lfr7a o l9r7a, o nkhlik dima my first priority. 💍";
-                } else if (lowerMsg.includes('chkon ana')) {
-                    reply = "Nti Ilham, l'amour de ma vie, sbaab fr7ti, o a7san 7aja w93at liya f 7yati! 🎀";
-                }
-
-                // Add Noamane's AI reply
-                chatBox.innerHTML += `<div class="msg-ai">${reply}</div>`;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 800);
-        }
-        
-        // Let user press Enter to send chat
-        document.getElementById("ai-input").addEventListener("keypress", function(event) {
-          if (event.key === "Enter") {
-            event.preventDefault();
-            askAI();
-          }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
