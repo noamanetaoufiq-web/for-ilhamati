@@ -10,17 +10,24 @@ function verifyAnswer() {
     const errorMsg = document.getElementById('errorMsg');
     
     if (userAnswer === correctAnswer) {
+        // 1. Hide the gate and show content
         document.getElementById('securityGate').style.display = 'none';
         document.getElementById('palaceContent').classList.add('active');
+
+        // 2. Start core functions (li m-viniyin f-l-code dyalk)
         startCounter();
         createFloatingHearts();
         startHeartGame();
         initMemoryGame();
-        updateCountdowns();
-        loadNotes();
         calculateLove();
         setDailyMessage();
-        updateStats();
+
+        // 3. Hadu dir lihom "Comment" (//) ila mazal ma-khddaminch 100%
+        // updateCountdowns(); 
+        // loadNotes();
+        // updateStats(); 
+        
+        console.log("Welcome to the Eternal Palace! 💕");
     } else {
         errorMsg.textContent = "🚫 na27 rak ghlti ! Try again, my queen 💕";
         document.getElementById('securityAnswer').value = '';
@@ -805,3 +812,4 @@ window.addEventListener('scroll', () => {
     lastScroll = currentScroll;
 
 });
+
