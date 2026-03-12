@@ -3,46 +3,28 @@
 // ========================================
 
 // ========== SECURITY GATE ==========
-const correctAnswer = "ilhamati";
-
-// ========== SECURITY GATE ==========
-// Bdelt l-jawab hna bach y-9bel "ilhamati"
-const correctAnswer = "ilhamati"; 
+const correctAnswer = "ilham";
 
 function verifyAnswer() {
-    const inputElement = document.getElementById('securityAnswer');
-    const userAnswer = inputElement.value.toLowerCase().trim();
+    const userAnswer = document.getElementById('securityAnswer').value.toLowerCase().trim();
     const errorMsg = document.getElementById('errorMsg');
     
     if (userAnswer === correctAnswer) {
-        // Ila kan l-jawab s7i7
         document.getElementById('securityGate').style.display = 'none';
-        
-        const palace = document.getElementById('palaceContent');
-        if (palace) {
-            palace.classList.add('active');
-            palace.style.display = 'block'; // Bach t-akdo t-afficha
-        }
-
-        // Khdem ga3 l-ajza' l-okhrin
-        try {
-            startCounter();
-            createFloatingHearts();
-            startHeartGame();
-            initMemoryGame();
-            updateCountdowns();
-            loadNotes();
-            calculateLove();
-            setDailyMessage();
-            updateStats();
-        } catch (e) {
-            console.log("Chi fonction mazal makhdama: ", e);
-        }
+        document.getElementById('palaceContent').classList.add('active');
+        startCounter();
+        createFloatingHearts();
+        startHeartGame();
+        initMemoryGame();
+        updateCountdowns();
+        loadNotes();
+        calculateLove();
+        setDailyMessage();
+        updateStats();
     } else {
-        // Ila kan l-jawab ghlat
         errorMsg.textContent = "🚫 Rah ma jditi! Try again, my queen 💕";
-        inputElement.value = '';
-        inputElement.focus();
+        document.getElementById('securityAnswer').value = '';
+        document.getElementById('securityAnswer').focus();
     }
 }
 
@@ -823,6 +805,7 @@ window.addEventListener('scroll', () => {
     lastScroll = currentScroll;
 
 });
+
 
 
 
