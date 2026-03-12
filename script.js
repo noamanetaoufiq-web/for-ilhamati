@@ -157,7 +157,7 @@ function catchHeart() {
     document.getElementById('gameScore').textContent = gameScore;
     
     if (gameScore >= maxScore) {
-        alert('🎉 Mabrouk! You caught all 10 hearts! I love you so much habibtiii! 💕');
+        alert('🎉 Mabrouk! You caught all 10 hearts! I love you more! 💕');
         gameScore = 0;
         document.getElementById('gameScore').textContent = gameScore;
     }
@@ -184,12 +184,12 @@ function calculateLove() {
         { min: 70, text: "Strong and beautiful love! 💝" }
     ];
     
-    // Always show 1000% for Ilham
+    // Always show 100% for Ilham
     meter.style.width = '0%';
     percentage.textContent = '0%';
     
     setTimeout(() => {
-        meter.style.width = '1000%';
+        meter.style.width = '100%';
         
         let currentPercent = 0;
         const interval = setInterval(() => {
@@ -223,17 +223,17 @@ IMPORTANT RULES:
 10. Your relationship started January 25, 2025
 
 EXAMPLE RESPONSES IN DARIJA:
-- "waa knbghik bzzzf bzzzf bzzzf bzzf ailhamati  💕"
-- "Nti hiya 3winati o 3omri o rou7i knbghik ,love u ! 💖"
-- "Ana m3ak flkhyba, m3ak lkhyba , 3ad m3ak fzwina azini ! 💗"
+- "Bghik bzaf, ktir mn ay 7aja f denya! 💕"
+- "Nti l7aja li hyati, makayn hta wa7d kif nti! 💖"
+- "Ana m3ak lddarura, m3ak lkbira, m3ak kullchi! 💗"
 
 Remember: You ARE Noamane's heart. Speak directly to Ilham with love.`;
 
 const fallbackResponses = [
-    "Nti hiya 3winati o 3omri o rou7i knbghik ,love u! 💕",
-    "waa knbghik bzzzf bzzzf bzzzf bzzf ailhamati! 💖",
-    "Nti bnti o hbibti o khti o mama o merty o kolchi , tjm3o fk ga3 sifat zwinin b7lk ! 💗",
-    "Ana m3ak flkhyba, m3ak lkhyba , 3ad m3ak fzwina azini! 💝",
+    "Bghik bzaf, ktir mn ay 7aja f denya! 💕",
+    "L9lb dyali kaygoul lik: ANA BGHITK! 💖",
+    "Nti l7aja li hyati, makayn hta wa7d kif nti! 💗",
+    "Ana m3ak lddarura, m3ak lkbira, m3ak kullchi! 💝",
     "Bghit nb9a m3ak l'abd! 💕"
 ];
 
@@ -317,12 +317,12 @@ async function sendConfession() {
 
 // ========== MOOD TRACKER ==========
 const moodResponses = {
-    happy: "Yay! 😊 Seeing you happy is honestly the highlight of my day. Your smile has this magical way of making everything feel right, no matter what’s going on. You deserve all the joy in the world, Ilhamati, and I promise to always be the one who protects that beautiful spark in your eyes. Keep shining, my queen 💕",
-    loved: "🥰 Seeing you happy is honestly the highlight of my day. Your smile has this magical way of making everything feel right, no matter what’s going on. You deserve all the joy in the world, Ilhamati, and I promise to always be the one who protects that beautiful spark in your eyes. Keep shining, my queen wa rani knnbghiiiik bzzf wlh wlh  💖",
-    sad: "😢 I hate that you’re feeling this way, but I want you to know that it’s okay to not be okay. I’m right here with you, and I’m not going anywhere. Lean on me as much as you need to. Your heart is safe with me, and we’ll get through this cloud together until the sun comes back out. I love you, always ylh bghit nchuf d7yka ylh ylh ylh ylhhhhh 💕",
-    angry: "😤 sm7i liya bzaaaf I’m truly sorry for making you feel this way. It was never my intention to hurt you or make you angry, because you’re the last person I’d ever want to upset. I value us more than being 'right,' and I want to make things right between us. Please tell me how I can make it up to you, because your peace of mind means everything to me 3faq 3afaq 3afq 💕",
-    sleepy: "😴 fik n3as lah lah m3lich tsb7i 3la khir 7lmi b2a7lam zwina b7alk azwina dyali mohim nkhlik trta7i o try7i rou7k bizo knbghik knbghik bzzzf  ! 🌙",
-    excited: "🤩 Wow! a7sn cho3or There is nothing more beautiful than seeing that spark in your eyes when you're excited about something. I’m so happy to be the one you're sharing this feeling with. Your passion is one of the things I love most about you. Let’s keep this vibe going—I want to celebrate every single win with you!! 💕"
+    happy: "Yay! 😊 Fr7tli ana aydan! Nti fr7ana = ana fr7an! 💕",
+    loved: "🥰 Nti merit kol l7ub! Bghik ktirrr! 💖",
+    sad: "😢 La t7zni hbibti! Ana m3ak dima! Ghadi n9der nswl? 💕",
+    angry: "😤 Smit lia! Chno dar? Ghadi n97ab! 💕",
+    sleepy: "😴 N9der tnaqi a hbibti! Good night, sweet dreams! 🌙",
+    excited: "🤩 Wow! Chno li far7ek? Gulili! Ana aydan excited! 💕"
 };
 
 function selectMood(mood) {
@@ -417,9 +417,6 @@ const dailyMessages = [
     "Every moment with you is a gift I treasure. You are my everything. 💖",
     "If I could give you one thing, it would be the ability to see yourself through my eyes. You're perfect! 💗",
     "You turn ordinary moments into extraordinary memories. I'm so lucky to have you! 💝"
-    "The best part of my today is knowing that I get to walk through life with you. No matter what the world throws at us, having you by my side makes everything feel like a beautiful adventure. You aren’t just my partner; you’re my peace ❣️❣️ "
-    " 𝑰 𝒎𝒊𝒔𝒔 𝒚𝒐𝒖 🥺❤️ "
-    "Just a reminder for today: You are braver than you believe, stronger than you seem, and loved more than you could ever imagine. I’m so proud of the person you are, Ilhamati. Keep being amazing 📌🌹 "
 ];
 
 function setDailyMessage() {
@@ -458,6 +455,7 @@ function sendGift(gift) {
 
 // ========== COUPLE QUESTIONS GAME ==========
 const coupleQuestions = [
+    { q: "What was your first impression of Noamane?", a: "Probably thought he was cute but maybe a little crazy! 😂" },
     { q: "What's your favorite memory together?", a: "Every moment together is special! But that first day was magical! 💕" },
     { q: "What do you love most about Noamane?", a: "His heart, his smile, his everything! 💖" },
     { q: "Where do you see us in 5 years?", a: "Together, happy, and more in love than ever! 💗" },
@@ -803,9 +801,4 @@ window.addEventListener('scroll', () => {
         nav.style.transform = 'translateY(0)';
     }
     lastScroll = currentScroll;
-
 });
-
-
-
-
