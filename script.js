@@ -6,32 +6,38 @@
 const correctAnswer = "ilhamati";
 
 function verifyAnswer() {
-    const userAnswer = document.getElementById('securityAnswer').value.toLowerCase().trim();
-    const errorMsg = document.getElementById('errorMsg');
+    // Hadu huma l-ajwiba li t9der t-9belhom (t9der tzid ktr)
+    const validAnswers = ["ilhamati", "ilham", "ilhamati 🌸"];
     
-    if (userAnswer === correctAnswer) {
-        // 1. Hide the gate and show content
-        document.getElementById('securityGate').style.display = 'none';
-        document.getElementById('palaceContent').classList.add('active');
+    // l-input li dkhlat hiya
+    const userInput = document.getElementById('securityAnswer').value.toLowerCase().trim();
+    const errorMsg = document.getElementById('errorMsg');
+    const securityGate = document.getElementById('securityGate');
+    const palaceContent = document.getElementById('palaceContent');
 
-        // 2. Start core functions (li m-viniyin f-l-code dyalk)
-        startCounter();
-        createFloatingHearts();
-        startHeartGame();
-        initMemoryGame();
-        calculateLove();
-        setDailyMessage();
-
-        // 3. Hadu dir lihom "Comment" (//) ila mazal ma-khddaminch 100%
-        // updateCountdowns(); 
-        // loadNotes();
-        // updateStats(); 
+    if (validAnswers.includes(userInput)) {
+        // Ila kan l-jawab s7i7:
+        errorMsg.style.color = "#2ecc71";
+        errorMsg.innerText = "Correct! Welcome Princess... 👑";
         
-        console.log("Welcome to the Eternal Palace! 💕");
+        // Animation bach t-ghber l-gate o t-ban l-page
+        setTimeout(() => {
+            securityGate.style.opacity = "0";
+            setTimeout(() => {
+                securityGate.style.display = "none";
+                palaceContent.style.display = "block";
+                // Ila knti derti l-opacity f CSS:
+                palaceContent.style.opacity = "1";
+            }, 500);
+        }, 1000);
     } else {
-        errorMsg.textContent = "🚫 na27 rak ghlti ! Try again, my queen 💕";
-        document.getElementById('securityAnswer').value = '';
-        document.getElementById('securityAnswer').focus();
+        // Ila kan l-jawab ghlat:
+        errorMsg.style.color = "#e74c3c";
+        errorMsg.innerText = "❌ Nooo, hadik machi smiyti f 9lbk!";
+        
+        // Shake animation sghira
+        const inputField = document.getElementById('securityAnswer');
+        inputField.style.border = "2px solid #e74c3c";
     }
 }
 
@@ -812,4 +818,5 @@ window.addEventListener('scroll', () => {
     lastScroll = currentScroll;
 
 });
+
 
