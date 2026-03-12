@@ -5,39 +5,44 @@
 // ========== SECURITY GATE ==========
 const correctAnswer = "ilhamati";
 
-function verifyAnswer() {
-    // Hadu huma l-ajwiba li t9der t-9belhom (t9der tzid ktr)
-    const validAnswers = ["ilhamati", "ilham", "ilhamati 🌸"];
-    
-    // l-input li dkhlat hiya
-    const userInput = document.getElementById('securityAnswer').value.toLowerCase().trim();
-    const errorMsg = document.getElementById('errorMsg');
-    const securityGate = document.getElementById('securityGate');
-    const palaceContent = document.getElementById('palaceContent');
+// ========== SECURITY GATE ==========
+// Bdelt l-jawab hna bach y-9bel "ilhamati"
+const correctAnswer = "ilhamati"; 
 
-    if (validAnswers.includes(userInput)) {
-        // Ila kan l-jawab s7i7:
-        errorMsg.style.color = "#2ecc71";
-        errorMsg.innerText = "Correct! Welcome Princess... 👑";
+function verifyAnswer() {
+    const inputElement = document.getElementById('securityAnswer');
+    const userAnswer = inputElement.value.toLowerCase().trim();
+    const errorMsg = document.getElementById('errorMsg');
+    
+    if (userAnswer === correctAnswer) {
+        // Ila kan l-jawab s7i7
+        document.getElementById('securityGate').style.display = 'none';
         
-        // Animation bach t-ghber l-gate o t-ban l-page
-        setTimeout(() => {
-            securityGate.style.opacity = "0";
-            setTimeout(() => {
-                securityGate.style.display = "none";
-                palaceContent.style.display = "block";
-                // Ila knti derti l-opacity f CSS:
-                palaceContent.style.opacity = "1";
-            }, 500);
-        }, 1000);
+        const palace = document.getElementById('palaceContent');
+        if (palace) {
+            palace.classList.add('active');
+            palace.style.display = 'block'; // Bach t-akdo t-afficha
+        }
+
+        // Khdem ga3 l-ajza' l-okhrin
+        try {
+            startCounter();
+            createFloatingHearts();
+            startHeartGame();
+            initMemoryGame();
+            updateCountdowns();
+            loadNotes();
+            calculateLove();
+            setDailyMessage();
+            updateStats();
+        } catch (e) {
+            console.log("Chi fonction mazal makhdama: ", e);
+        }
     } else {
-        // Ila kan l-jawab ghlat:
-        errorMsg.style.color = "#e74c3c";
-        errorMsg.innerText = "❌ Nooo, hadik machi smiyti f 9lbk!";
-        
-        // Shake animation sghira
-        const inputField = document.getElementById('securityAnswer');
-        inputField.style.border = "2px solid #e74c3c";
+        // Ila kan l-jawab ghlat
+        errorMsg.textContent = "🚫 Rah ma jditi! Try again, my queen 💕";
+        inputElement.value = '';
+        inputElement.focus();
     }
 }
 
@@ -818,5 +823,6 @@ window.addEventListener('scroll', () => {
     lastScroll = currentScroll;
 
 });
+
 
 
