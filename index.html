@@ -25,7 +25,7 @@
             
             <div class="security-form">
                 <div class="form-group">
-                    <label class="form-label">🔒 Question 1: Chno smiya li msmiha 3lk?</label>
+                    <label class="form-label">🔐 Question 1: Chno smiya li msmiha 3lk?</label>
                     <input type="text" id="securityAnswer" class="form-input" placeholder="Jawab hna...">
                 </div>
                 <button class="verify-btn" onclick="verifyAnswer()">
@@ -171,7 +171,7 @@
                 <div class="timeline-item left">
                     <div class="timeline-content">
                         <div class="timeline-date">Special Days</div>
-                        <h3>🎂 Celebrations</h3>
+                        <h3>🎈 Celebrations</h3>
                         <p>Birthday surprises, special dates, and unforgettable memories.</p>
                     </div>
                 </div>
@@ -190,7 +190,7 @@
             <h2 class="section-title">🎮 The Love Quest</h2>
             <p class="section-subtitle">Catch 10 hearts! ❤️</p>
             <div class="game-container">
-                <div class="game-score">Score: <span id="gameScore">0</span> 🎀</div>
+                <div class="game-score">Score: <span id="gameScore">0</span 🎀</div>
                 <div class="game-area" id="gameArea">
                     <button class="heart-btn" id="heartBtn" onclick="catchHeart()">❤️</button>
                 </div>
@@ -238,6 +238,12 @@
                     <button class="confession-btn" onclick="sendConfession()">Send to Noamane's Heart 💌</button>
                 </div>
                 <div id="confessionResponse" class="confession-response" style="display: none;"></div>
+                
+                <!-- Confession History -->
+                <div class="confession-history-section">
+                    <h3 class="history-title">💌 Your Love Notes History</h3>
+                    <div id="confessionHistoryDisplay"></div>
+                </div>
             </div>
         </section>
 
@@ -453,7 +459,7 @@
             <h2 class="section-title">⏰ Countdown to Special Days</h2>
             <div class="countdown-container">
                 <div class="countdown-card">
-                    <div class="countdown-icon">🎂</div>
+                    <div class="countdown-icon">🎈</div>
                     <h3>Ilham's Birthday</h3>
                     <div class="countdown-timer" id="birthdayCountdown"></div>
                 </div>
@@ -523,25 +529,25 @@
                 <div class="when-card" onclick="openWhen('happy')">
                     <div class="when-icon">😊</div>
                     <h3>You're Happy 🎀</h3>
-                    <p class="when-preview">That's what I love to see...</p>
+                    <p class="when-preview">Seeing you happy is honestly the highlight of my day...</p>
                     <div class="when-content">
-                        <p>That's what I love to see! Keep that smile on your face, it's my favorite power source. 🌟</p>
+                        <p>Seeing you happy is honestly the highlight of my day. Your smile has this magical way of making everything feel right, no matter what's going on. You deserve all the joy in the world, Ilhamati, and I promise to always be the one who protects that beautiful spark in your eyes. Keep shining, my queen ✨</p>
                     </div>
                 </div>
                 <div class="when-card" onclick="openWhen('angry')">
                     <div class="when-icon">😤</div>
                     <h3>Angry at me 🎀</h3>
-                    <p class="when-preview">I'm sorry, my queen...</p>
+                    <p class="when-preview">I'm truly sorry for making you feel this way...</p>
                     <div class="when-content">
-                        <p>I'm sorry, my queen. I know I can be a headache sometimes, but I never mean to hurt you. Let's fix it? 🫂</p>
+                        <p>I'm truly sorry for making you feel this way. It was never my intention to hurt you or make you angry, because you're the last person I'd ever want to upset. I value us more than being 'right,' and I want to make things right between us. Please tell me how I can make it up to you, because your peace of mind means everything to me 💕</p>
                     </div>
                 </div>
                 <div class="when-card" onclick="openWhen('sad')">
                     <div class="when-icon">😢</div>
                     <h3>Feel Sad 🎀</h3>
-                    <p class="when-preview">I wish I could hold you...</p>
+                    <p class="when-preview">I hate that you're feeling this way...</p>
                     <div class="when-content">
-                        <p>I wish I could hold you tight right now. You are so strong, but it's okay to let it out. I'm always here. ❤️</p>
+                        <p>I hate that you're feeling this way, but I want you to know that it's okay to not be okay. I'm right here with you, and I'm not going anywhere. Lean on me as much as you need to. Your heart is safe with me, and we'll get through this cloud together until the sun comes back out. I love you, always 💖</p>
                     </div>
                 </div>
                 <div class="when-card" onclick="openWhen('bored')">
@@ -549,7 +555,7 @@
                     <h3>Bored 🎀</h3>
                     <p class="when-preview">Call me!</p>
                     <div class="when-content">
-                        <p>Call me! Or look through our photos. I'll always find a way to make you laugh. 🎮</p>
+                        <p>Being loved by you is the greatest gift I've ever received, and loving you back is my favorite thing to do. I want you to carry this feeling in your heart every day—knowing that you are cherished, valued, and deeply loved for exactly who you are. You don't have to be perfect; you just have to be you, because that's the person I fell in love with 💗</p>
                     </div>
                 </div>
             </div>
@@ -557,7 +563,7 @@
 
         <!-- Why I Love You -->
         <section class="why-love-section">
-            <h2 class="section-title">💖 Why I Love You</h2>
+            <h2 class="section-title">💕 Why I Love You</h2>
             <div class="reasons-grid">
                 <div class="reason-card">
                     <div class="reason-icon">✨</div>
@@ -647,7 +653,7 @@
                     <p>Traveling to every place you ever dreamed of.</p>
                 </div>
                 <div class="future-item">
-                    <span class="future-icon">🏡</span>
+                    <span class="future-icon">🏠</span>
                     <p>Creating our own cozy world full of peace.</p>
                 </div>
                 <div class="future-item">
@@ -723,7 +729,7 @@
                     </div>
                 </div>
                 <div class="date-card">
-                    <div class="date-icon">🎂</div>
+                    <div class="date-icon">🎈</div>
                     <div class="date-info">
                         <h3>January 31 </h3>
                         <p>Ilham's Birthday 🎀</p>

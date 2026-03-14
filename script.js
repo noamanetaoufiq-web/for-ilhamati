@@ -3,7 +3,7 @@
 // ========================================
 
 // ========== SECURITY GATE ==========
-const correctAnswer = "ilham";
+const correctAnswer = "ilhamati";
 
 function verifyAnswer() {
     const userAnswer = document.getElementById('securityAnswer').value.toLowerCase().trim();
@@ -21,6 +21,7 @@ function verifyAnswer() {
         calculateLove();
         setDailyMessage();
         updateStats();
+        displayConfessionHistory();
     } else {
         errorMsg.textContent = "🚫 Rah ma jditi! Try again, my queen 💕";
         document.getElementById('securityAnswer').value = '';
@@ -40,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ========== FLOATING HEARTS BACKGROUND ==========
 function createFloatingHearts() {
     const container = document.getElementById('floatingHearts');
-    const hearts = ['💕', '💖', '💗', '💝', '💘', '💓', '💞', '💟', '❤️', '🩷'];
+    const hearts = ['💕', '💖', '💗', '💝', '💘', '💓', '💞', '💟', '❤️', '🧸'];
     
     setInterval(() => {
         const heart = document.createElement('div');
@@ -300,6 +301,74 @@ async function askNoamane() {
 }
 
 // ========== CONFESSION BOOTH ==========
+const TELEGRAM_BOT_TOKEN = '8720613063:AAE1MR4dmfbcRaK8vwfAFQGO1AcXSmJOI8s';
+const TELEGRAM_CHAT_ID = '5009133929';
+
+// Save confession to localStorage
+function saveConfessionToHistory(text) {
+    const history = JSON.parse(localStorage.getItem('ilhamConfessions') || '[]');
+    const confession = {
+        text: text,
+        date: new Date().toLocaleString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }),
+        timestamp: Date.now()
+    };
+    history.push(confession);
+    localStorage.setItem('ilhamConfessions', JSON.stringify(history));
+    return confession;
+}
+
+// Display confession history
+function displayConfessionHistory() {
+    const historyDiv = document.getElementById('confessionHistoryDisplay');
+    if (!historyDiv) return;
+    
+    const history = JSON.parse(localStorage.getItem('ilhamConfessions') || '[]');
+    
+    if (history.length === 0) {
+        historyDiv.innerHTML = '<p class="no-history">No messages yet... Write your first love note! 💕</p>';
+        return;
+    }
+    
+    historyDiv.innerHTML = history.reverse().map(confession => `
+        <div class="confession-history-item">
+            <div class="confession-date">📅 ${confession.date}</div>
+            <div class="confession-text-history">"${confession.text}"</div>
+        </div>
+    `).join('');
+}
+
+// Send message to Telegram
+async function sendToTelegram(text) {
+    const message = `💌 *New Message from Ilhamati*\n\n━━━━━━━━━━━━━━━\n\n"${text}"\n\n━━━━━━━━━━━━━━━\n\n💫 Sent from The Eternal Palace`;
+    
+    try {
+        const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chat_id: TELEGRAM_CHAT_ID,
+                text: message,
+                parse_mode: 'Markdown'
+            })
+        });
+        
+        const data = await response.json();
+        return data.ok;
+    } catch (error) {
+        console.error('Telegram error:', error);
+        return false;
+    }
+}
+
 async function sendConfession() {
     const input = document.getElementById('confessionText');
     const text = input.value.trim();
@@ -309,15 +378,30 @@ async function sendConfession() {
     responseDiv.style.display = 'block';
     responseDiv.innerHTML = '<p>💕 Noamane is reading your confession...</p>';
     
+    // Save to history
+    saveConfessionToHistory(text);
+    
+    // Update history display
+    displayConfessionHistory();
+    
+    // Send to Telegram (async, don't wait)
+    sendToTelegram(text);
+    
+    // Get AI response
     const aiResponse = await callGeminiAPI(`Ilham confesses: "${text}" - Respond lovingly to her confession.`);
     
-    responseDiv.innerHTML = `<p><strong>💕 From Noamane's Heart:</strong></p><p>${aiResponse || 'Shukran hbibti! Ana aydan bghik ktir! 💖'}</p>`;
+    responseDiv.innerHTML = `
+        <p><strong>💕 From Noamane's Heart:</strong></p>
+        <p>${aiResponse || 'Shukran hbibti! Ana aydan bghik ktir! 💖'}</p>
+        <p class="telegram-status">✨ Message saved & sent to Noamane's heart! 💌</p>
+    `;
+    
     input.value = '';
 }
 
 // ========== MOOD TRACKER ==========
 const moodResponses = {
-    happy: "Yay! 😊 Fr7tli ana aydan! Nti fr7ana = ana fr7an! 💕",
+    happy: "😊 Yay! Fr7tli ana aydan! Nti fr7ana = ana fr7an! 💕",
     loved: "🥰 Nti merit kol l7ub! Bghik ktirrr! 💖",
     sad: "😢 La t7zni hbibti! Ana m3ak dima! Ghadi n9der nswl? 💕",
     angry: "😤 Smit lia! Chno dar? Ghadi n97ab! 💕",
