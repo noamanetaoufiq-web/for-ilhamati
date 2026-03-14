@@ -1,6 +1,124 @@
+
 // ========================================
 // The Eternal Palace - JavaScript Magic
 // ========================================
+
+// ========== FIREBASE CONFIGURATION ==========
+const firebaseConfig = {
+    databaseURL: "https://eternal-palace-default-rtdb.firebaseio.com/"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// ========== MISS YOU FEATURE ==========
+const MISS_YOU_TELEGRAM_TOKEN = '8720613063:AAE1MR4dmfbcRaK8vwfAFQGO1AcXSmJOI8s';
+const MISS_YOU_CHAT_ID = '5009133929';
+let missYouCooldown = false;
+
+// Initialize Firebase listener for Noamane's miss you
+function initMissYouListener() {
+    const missYouRef = database.ref('status/noamane_misses');
+    
+    missYouRef.on('value', (snapshot) => {
+        const value = snapshot.val();
+        if (value === true) {
+            showMissYouPopup();
+            // Reset the value in Firebase
+            missYouRef.set(false);
+        }
+    });
+}
+
+// Send Miss You to Telegram and show hearts
+async function sendMissYou() {
+    if (missYouCooldown) {
+        alert('Please wait a bit before sending another miss you! 💕');
+        return;
+    }
+    
+    const btn = document.getElementById('missYouBtn');
+    const cooldownText = document.getElementById('missYouCooldown');
+    
+    // Send to Telegram
+    try {
+        await fetch(`https://api.telegram.org/bot${MISS_YOU_TELEGRAM_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: MISS_YOU_CHAT_ID,
+                text: '💖 Ilhamati misses you so much right now!'
+            })
+        });
+    } catch (error) {
+        console.error('Telegram error:', error);
+    }
+    
+    // Show hearts rain animation
+    showHeartsRain();
+    
+    // Start cooldown
+    missYouCooldown = true;
+    btn.disabled = true;
+    btn.textContent = 'Sending love... 💕';
+    
+    setTimeout(() => {
+        btn.textContent = 'Sent! Wait 5 min 💖';
+        cooldownText.style.display = 'block';
+        
+        let remainingTime = 300; // 5 minutes in seconds
+        const cooldownInterval = setInterval(() => {
+            remainingTime--;
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            cooldownText.textContent = `Cooldown: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (remainingTime <= 0) {
+                clearInterval(cooldownInterval);
+                missYouCooldown = false;
+                btn.disabled = false;
+                btn.textContent = 'Miss You, Noamane 💖';
+                cooldownText.style.display = 'none';
+            }
+        }, 1000);
+    }, 1000);
+}
+
+// Show hearts rain animation
+function showHeartsRain() {
+    const container = document.getElementById('heartsRainContainer');
+    const hearts = ['💖', '💕', '💗', '💓', '💞', '💝', '❤️', '🩷', '🤍'];
+    
+    for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.className = 'heart-rain';
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            container.appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 3000);
+        }, i * 100);
+    }
+}
+
+// Show Miss You Popup
+function showMissYouPopup() {
+    const popup = document.getElementById('missYouPopup');
+    popup.classList.add('active');
+    
+    // Also show hearts rain
+    showHeartsRain();
+}
+
+// Close Miss You Popup
+function closeMissYouPopup() {
+    const popup = document.getElementById('missYouPopup');
+    popup.classList.remove('active');
+}
 
 // ========== SECURITY GATE ==========
 const correctAnswer = "ilhamati";
@@ -22,6 +140,7 @@ function verifyAnswer() {
         setDailyMessage();
         updateStats();
         displayConfessionHistory();
+        initMissYouListener();
     } else {
         errorMsg.textContent = "🚫 Rah ma jditi! Try again, my queen 💕";
         document.getElementById('securityAnswer').value = '';

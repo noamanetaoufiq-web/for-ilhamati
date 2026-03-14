@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Eternal Palace 👑</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a0a1a 0%, #2d1f3d 50%, #1a0a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .admin-container {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(255, 182, 193, 0.1));
+            padding: 50px;
+            border-radius: 30px;
+            text-align: center;
+            border: 2px solid rgba(255, 182, 193, 0.3);
+            box-shadow: 0 0 50px rgba(255, 107, 157, 0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .admin-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #ffb6c1;
+            margin-bottom: 10px;
+        }
+        
+        .admin-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+        
+        .admin-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .send-miss-btn {
+            padding: 20px 50px;
+            font-size: 1.3rem;
+            font-family: 'Dancing Script', cursive;
+            background: linear-gradient(135deg, #ff6b9d, #ffb6c1);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+            margin-bottom: 20px;
+        }
+        
+        .send-miss-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 107, 157, 0.5);
+        }
+        
+        .send-miss-btn:disabled {
+            background: linear-gradient(135deg, #999, #bbb);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .status-message {
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 20px;
+            font-size: 1rem;
+            min-height: 30px;
+        }
+        
+        .status-message.success {
+            color: #4ade80;
+        }
+        
+        .footer-text {
+            margin-top: 40px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+        }
+        
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .instructions h3 {
+            color: #ffb6c1;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .instructions p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-icon">👑</div>
+        <h1 class="admin-title">Noamane's Admin Panel</h1>
+        <p class="admin-subtitle">Send love back to your queen 💖</p>
+        
+        <div class="instructions">
+            <h3>💕 How it works:</h3>
+            <p>Click the button below to let Ilham know you miss her too! A romantic popup will appear on her screen instantly.</p>
+        </div>
+        
+        <button id="sendMissYouBackBtn" class="send-miss-btn" onclick="sendMissYouBack()">
+            Send Miss You Back 💖
+        </button>
+        
+        <p id="statusMessage" class="status-message"></p>
+        
+        <p class="footer-text">The Eternal Palace Admin • Made with 💕</p>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            databaseURL: "https://eternal-palace-default-rtdb.firebaseio.com/"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // Send Miss You Back function
+        async function sendMissYouBack() {
+            const btn = document.getElementById('sendMissYouBackBtn');
+            const statusMsg = document.getElementById('statusMessage');
+            
+            btn.disabled = true;
+            btn.textContent = 'Sending... 💕';
+            statusMsg.textContent = '';
+            
+            try {
+                // Set noamane_misses to true
+                await database.ref('status/noamane_misses').set(true);
+                
+                statusMsg.textContent = '💖 Miss you sent! Ilham will see it on her screen!';
+                statusMsg.classList.add('success');
+                btn.textContent = 'Sent! ✨';
+                
+                // Automatically reset after 5 seconds
+                setTimeout(async () => {
+                    await database.ref('status/noamane_misses').set(false);
+                    btn.disabled = false;
+                    btn.textContent = 'Send Miss You Back 💖';
+                    statusMsg.textContent = 'Ready to send another one!';
+                }, 5000);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                statusMsg.textContent = '❌ Something went wrong. Try again!';
+                btn.disabled = false;
+                btn.textContent = 'Send Miss You Back 💖';
+            }
+        }
+    </script>
+</body>
+</html>

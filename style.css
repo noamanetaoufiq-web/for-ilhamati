@@ -2256,3 +2256,175 @@ section {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--dark-pink);
 }
+/* ========== MISS YOU SECTION ========== */
+.miss-you-section {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(255, 182, 193, 0.15));
+}
+
+.miss-you-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.miss-you-btn {
+    padding: 20px 50px;
+    font-size: 1.3rem;
+    font-family: 'Dancing Script', cursive;
+    background: linear-gradient(135deg, #ff6b9d, #ffb6c1);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.miss-you-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.miss-you-btn:hover::before {
+    left: 100%;
+}
+
+.miss-you-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(255, 107, 157, 0.5);
+}
+
+.miss-you-btn:disabled {
+    background: linear-gradient(135deg, #999, #bbb);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.cooldown-text {
+    margin-top: 15px;
+    color: rgba(255, 182, 193, 0.9);
+    font-style: italic;
+    font-size: 0.95rem;
+}
+
+/* ========== MISS YOU POPUP ========== */
+.miss-you-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(10px);
+}
+
+.miss-you-popup.active {
+    display: flex;
+    animation: fadeIn 0.5s ease;
+}
+
+.popup-content {
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.3), rgba(255, 182, 193, 0.3));
+    padding: 50px 60px;
+    border-radius: 30px;
+    text-align: center;
+    border: 2px solid rgba(255, 182, 193, 0.5);
+    box-shadow: 0 0 60px rgba(255, 107, 157, 0.5);
+    animation: popIn 0.5s ease;
+}
+
+.popup-hearts {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    animation: heartBeat 1s ease infinite;
+}
+
+.popup-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5rem;
+    color: #ffb6c1;
+    margin-bottom: 15px;
+    text-shadow: 0 0 20px rgba(255, 182, 193, 0.5);
+}
+
+.popup-message {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+}
+
+.popup-close-btn {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    font-family: 'Dancing Script', cursive;
+    background: linear-gradient(135deg, #ff6b9d, #ffb6c1);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.popup-close-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 20px rgba(255, 107, 157, 0.5);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes popIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+/* ========== HEARTS RAIN ANIMATION ========== */
+.hearts-rain-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.heart-rain {
+    position: absolute;
+    top: -50px;
+    font-size: 2rem;
+    animation: heartFall 3s linear forwards;
+}
+
+@keyframes heartFall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}

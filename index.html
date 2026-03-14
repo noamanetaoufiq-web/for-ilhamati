@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 </head>
 <body>
     <!-- Floating Hearts Background -->
@@ -244,6 +248,19 @@
                     <h3 class="history-title">💌 Your Love Notes History</h3>
                     <div id="confessionHistoryDisplay"></div>
                 </div>
+            </div>
+        </section>
+
+        
+        <!-- Miss You Section -->
+        <section class="miss-you-section">
+            <h2 class="section-title">💖 Miss You Corner</h2>
+            <p class="section-subtitle">When you miss Noamane, let him know! 🥰</p>
+            <div class="miss-you-container">
+                <button id="missYouBtn" class="miss-you-btn" onclick="sendMissYou()">
+                    Miss You, Noamane 💖
+                </button>
+                <p id="missYouCooldown" class="cooldown-text" style="display: none;"></p>
             </div>
         </section>
 
@@ -779,6 +796,20 @@
     </div>
 
     <script src="script.js"></script>
+
+    <!-- Miss You Popup -->
+    <div id="missYouPopup" class="miss-you-popup">
+        <div class="popup-content">
+            <div class="popup-hearts">💖💕💖</div>
+            <h2 class="popup-title">Noamane misses you too, hbiba! 🥰</h2>
+            <p class="popup-message">He's thinking of you right now...</p>
+            <button class="popup-close-btn" onclick="closeMissYouPopup()">Close 💕</button>
+        </div>
+    </div>
+
+    <!-- Hearts Rain Container -->
+    <div id="heartsRainContainer" class="hearts-rain-container"></div>
+
 </body>
 
 </html>
